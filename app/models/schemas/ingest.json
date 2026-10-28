@@ -1,0 +1,237 @@
+{
+  "$defs": {
+    "EvidenceItem": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "time_first": {
+          "title": "Time First",
+          "type": "string"
+        },
+        "time_last": {
+          "title": "Time Last",
+          "type": "string"
+        },
+        "count": {
+          "default": 1,
+          "title": "Count",
+          "type": "integer"
+        },
+        "level": {
+          "enum": [
+            "ERROR",
+            "WARN",
+            "INFO",
+            "DEBUG"
+          ],
+          "title": "Level",
+          "type": "string"
+        },
+        "component": {
+          "title": "Component",
+          "type": "string"
+        },
+        "category": {
+          "enum": [
+            "error",
+            "performance",
+            "deployment",
+            "configuration",
+            "database",
+            "network",
+            "security",
+            "health",
+            "routine"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "summary": {
+          "title": "Summary",
+          "type": "string"
+        },
+        "notable": {
+          "default": false,
+          "title": "Notable",
+          "type": "boolean"
+        },
+        "notable_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Notable Reason"
+        }
+      },
+      "required": [
+        "id",
+        "time_first",
+        "time_last",
+        "level",
+        "component",
+        "category",
+        "summary"
+      ],
+      "title": "EvidenceItem",
+      "type": "object"
+    },
+    "ResidualSensitiveData": {
+      "properties": {
+        "evidence_id": {
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "password",
+            "token",
+            "card",
+            "email",
+            "personal_data",
+            "other"
+          ],
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "type"
+      ],
+      "title": "ResidualSensitiveData",
+      "type": "object"
+    },
+    "TimeRange": {
+      "properties": {
+        "start": {
+          "default": "",
+          "title": "Start",
+          "type": "string"
+        },
+        "end": {
+          "default": "",
+          "title": "End",
+          "type": "string"
+        }
+      },
+      "title": "TimeRange",
+      "type": "object"
+    },
+    "Trend": {
+      "properties": {
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "metric": {
+          "default": "",
+          "title": "Metric",
+          "type": "string"
+        },
+        "direction": {
+          "default": "stable",
+          "enum": [
+            "increasing",
+            "decreasing",
+            "stable"
+          ],
+          "title": "Direction",
+          "type": "string"
+        },
+        "from": {
+          "default": "",
+          "title": "From",
+          "type": "string"
+        },
+        "to": {
+          "default": "",
+          "title": "To",
+          "type": "string"
+        },
+        "comment": {
+          "default": "",
+          "title": "Comment",
+          "type": "string"
+        }
+      },
+      "title": "Trend",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "source": {
+      "title": "Source",
+      "type": "string"
+    },
+    "source_type": {
+      "enum": [
+        "application",
+        "database",
+        "proxy",
+        "os",
+        "other"
+      ],
+      "title": "Source Type",
+      "type": "string"
+    },
+    "detected_format": {
+      "default": "",
+      "title": "Detected Format",
+      "type": "string"
+    },
+    "time_range": {
+      "$ref": "#/$defs/TimeRange"
+    },
+    "evidence": {
+      "items": {
+        "$ref": "#/$defs/EvidenceItem"
+      },
+      "title": "Evidence",
+      "type": "array"
+    },
+    "trends": {
+      "items": {
+        "$ref": "#/$defs/Trend"
+      },
+      "title": "Trends",
+      "type": "array"
+    },
+    "data_quality": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Data Quality",
+      "type": "array"
+    },
+    "residual_sensitive_data": {
+      "items": {
+        "$ref": "#/$defs/ResidualSensitiveData"
+      },
+      "title": "Residual Sensitive Data",
+      "type": "array"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "source",
+    "source_type"
+  ],
+  "title": "IngestOutput",
+  "type": "object"
+}

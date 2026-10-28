@@ -1,0 +1,1 @@
+{"version": "1.0.0", "agent": "triage", "output_model": "TriageOutput", "tools": ["get_evidence_detail"]}

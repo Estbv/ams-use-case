@@ -1,0 +1,10 @@
+2026-10-20 13:52:00 INFO  [SHOPDB] Scheduler job BATCH_ARCHIVE started (sid=377, user=BATCH_OWNER) - archiving SHOP.ORDER_ITEMS rows older than 400 days, lock mode=EXCLUSIVE
+2026-10-20 13:55:09 INFO  [SHOPDB] DDL started (sid=512, user=FLYWAY_SHOP, module=checkout-service): CREATE INDEX SHOP.IDX_ORDER_ITEMS_CUST_REF ON SHOP.ORDER_ITEMS (CUSTOMER_REF)
+2026-10-20 13:55:39 ERROR [SHOPDB] ORA-00054: resource busy and acquire with NOWAIT specified or timeout expired (sid=512, statement=CREATE INDEX SHOP.IDX_ORDER_ITEMS_CUST_REF, blocking_sid=377 BATCH_ARCHIVE)
+2026-10-20 13:57:14 WARN  [SHOPDB] Long running SQL: sql_id=7fq2k9xw1ab3c elapsed=2.0s module=checkout-service plan_step="TABLE ACCESS FULL SHOP.ORDER_ITEMS" rows_scanned=48211903
+2026-10-20 14:00:31 WARN  [SHOPDB] Long running SQL: sql_id=7fq2k9xw1ab3c elapsed=6.4s module=checkout-service plan_step="TABLE ACCESS FULL SHOP.ORDER_ITEMS" rows_scanned=48211903
+2026-10-20 14:03:31 INFO  [SHOPDB] Scheduler job BATCH_ARCHIVE completed (sid=377) rows_archived=1204332 duration=11m31s
+2026-10-20 14:04:00 WARN  [SHOPDB] Instance pressure: active_sessions=47 cpu=82% avg_wait_ms=305
+2026-10-20 14:08:12 WARN  [SHOPDB] Long running SQL: sql_id=7fq2k9xw1ab3c elapsed=18.8s module=checkout-service plan_step="TABLE ACCESS FULL SHOP.ORDER_ITEMS" rows_scanned=48211903
+2026-10-20 14:10:00 WARN  [SHOPDB] Tablespace USERS usage 81% (threshold 80%)
+2026-10-20 14:20:15 ERROR [SHOPDB] Listener: ORA-12170: TNS:Connect timeout occurred client=10.20.8.15 program=reporting-etl.exe

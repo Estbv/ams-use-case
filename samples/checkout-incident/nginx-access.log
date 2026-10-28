@@ -1,0 +1,7 @@
+203.0.113.24 - - [20/Oct/2026:13:54:52 +0000] "POST /api/checkout HTTP/1.1" 502 402 "-" "Mozilla/5.0" rt=0.001
+203.0.113.51 - - [20/Oct/2026:13:57:14 +0000] "POST /api/checkout HTTP/1.1" 200 1840 "-" "Mozilla/5.0" rt=2.210
+198.51.100.9 - - [20/Oct/2026:14:06:02 +0000] "POST /api/checkout HTTP/1.1" 500 514 "-" "Mozilla/5.0" rt=30.550
+203.0.113.33 - - [20/Oct/2026:14:06:40 +0000] "POST /api/checkout HTTP/1.1" 500 514 "-" "Mozilla/5.0" rt=30.610
+198.51.100.22 - - [20/Oct/2026:14:07:15 +0000] "GET /api/products/4411 HTTP/1.1" 200 2210 "-" "Mozilla/5.0" rt=0.012
+203.0.113.40 - - [20/Oct/2026:14:07:58 +0000] "POST /api/checkout HTTP/1.1" 500 514 "-" "Mozilla/5.0" rt=30.720
+198.51.100.17 - - [20/Oct/2026:14:09:47 +0000] "POST /api/checkout HTTP/1.1" 504 537 "-" "Mozilla/5.0" rt=60.001

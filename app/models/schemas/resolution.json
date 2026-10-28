@@ -1,0 +1,155 @@
+{
+  "$defs": {
+    "MitigationStep": {
+      "properties": {
+        "order": {
+          "title": "Order",
+          "type": "integer"
+        },
+        "step": {
+          "default": "",
+          "title": "Step",
+          "type": "string"
+        },
+        "owner": {
+          "default": "",
+          "title": "Owner",
+          "type": "string"
+        },
+        "risk": {
+          "default": "Medium",
+          "enum": [
+            "Low",
+            "Medium",
+            "High"
+          ],
+          "title": "Risk",
+          "type": "string"
+        },
+        "rollback": {
+          "default": "",
+          "title": "Rollback",
+          "type": "string"
+        },
+        "expected_effect": {
+          "default": "",
+          "title": "Expected Effect",
+          "type": "string"
+        },
+        "requires_change_request": {
+          "default": false,
+          "title": "Requires Change Request",
+          "type": "boolean"
+        },
+        "requires_dba": {
+          "default": false,
+          "title": "Requires Dba",
+          "type": "boolean"
+        },
+        "runbook_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Runbook Ref"
+        }
+      },
+      "required": [
+        "order"
+      ],
+      "title": "MitigationStep",
+      "type": "object"
+    },
+    "PermanentFix": {
+      "properties": {
+        "action": {
+          "default": "",
+          "title": "Action",
+          "type": "string"
+        },
+        "owner": {
+          "default": "",
+          "title": "Owner",
+          "type": "string"
+        },
+        "prevents": {
+          "default": "",
+          "title": "Prevents",
+          "type": "string"
+        },
+        "requires_change_request": {
+          "default": false,
+          "title": "Requires Change Request",
+          "type": "boolean"
+        }
+      },
+      "title": "PermanentFix",
+      "type": "object"
+    },
+    "ValidationCriterion": {
+      "properties": {
+        "criterion": {
+          "default": "",
+          "title": "Criterion",
+          "type": "string"
+        },
+        "target": {
+          "default": "",
+          "title": "Target",
+          "type": "string"
+        },
+        "how": {
+          "default": "",
+          "title": "How",
+          "type": "string"
+        }
+      },
+      "title": "ValidationCriterion",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "immediate_mitigation": {
+      "items": {
+        "$ref": "#/$defs/MitigationStep"
+      },
+      "title": "Immediate Mitigation",
+      "type": "array"
+    },
+    "permanent_fix": {
+      "items": {
+        "$ref": "#/$defs/PermanentFix"
+      },
+      "title": "Permanent Fix",
+      "type": "array"
+    },
+    "validation": {
+      "items": {
+        "$ref": "#/$defs/ValidationCriterion"
+      },
+      "title": "Validation",
+      "type": "array"
+    },
+    "risks_and_dependencies": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Risks And Dependencies",
+      "type": "array"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    }
+  },
+  "title": "ResolutionOutput",
+  "type": "object"
+}

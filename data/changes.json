@@ -1,0 +1,12 @@
+[
+  {
+    "id": "CHG-55821",
+    "app": "checkout-service",
+    "type": "deployment",
+    "version": "2.14.0",
+    "start": "2026-10-20T13:55:00",
+    "end": "2026-10-20T13:55:45",
+    "description": "Release 2.14.0 de checkout-service. Incluye feature flag order-history-enrichment y migracion Flyway 2.14.1 (add idx order items customer ref).",
+    "deployed_by": "CI/CD pipeline"
+  }
+]

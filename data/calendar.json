@@ -1,0 +1,20 @@
+[
+  {
+    "type": "scheduled_job",
+    "name": "BATCH_ARCHIVE",
+    "app": "oracle-db",
+    "database": "SHOPDB",
+    "start": "2026-10-20T13:52:00",
+    "end": "2026-10-20T14:03:31",
+    "description": "Archiva SHOP.ORDER_ITEMS rows older than 400 days. Lock mode=EXCLUSIVE sobre SHOP.ORDER_ITEMS.",
+    "blocks": ["SHOP.ORDER_ITEMS"],
+    "sid": 377
+  },
+  {
+    "type": "change_window",
+    "name": "ventana-nocturna",
+    "start": "2026-10-20T22:00:00",
+    "end": "2026-10-21T02:00:00",
+    "description": "Ventana de cambios nocturna estandar."
+  }
+]

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AMS Agentes</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div id="app">
+
+  <header>
+    <h1>AMS Agentes</h1>
+    <p class="subtitle">Analisis de logs de incidentes con agentes LLM</p>
+  </header>
+
+  <section id="form-section">
+    <h2>Nuevo caso</h2>
+    <form id="case-form">
+      <div class="form-row">
+        <label>Ticket ID *</label>
+        <input type="text" id="ticket_id" required placeholder="INC-2026-10482">
+      </div>
+      <div class="form-row">
+        <label>Aplicacion *</label>
+        <input type="text" id="application" required placeholder="checkout-service">
+      </div>
+      <div class="form-row">
+        <label>Descripcion</label>
+        <textarea id="description" rows="2" placeholder="Descripcion del incidente"></textarea>
+      </div>
+      <div class="form-row">
+        <label>Cambios recientes</label>
+        <textarea id="recent_changes" rows="2" placeholder="Despliegues, cambios..."></textarea>
+      </div>
+      <div class="form-row two-col">
+        <div>
+          <label>Entorno</label>
+          <input type="text" id="environment" placeholder="Java 17 / Spring Boot...">
+        </div>
+        <div>
+          <label>Reglas de negocio</label>
+          <input type="text" id="business_rules" placeholder="Severidad, criticidad...">
+        </div>
+      </div>
+      <div class="form-row">
+        <label>Archivos de log (.log, .txt) *</label>
+        <div id="drop-zone" class="drop-zone">
+          <p>Arrastra los archivos aqui o haz clic para seleccionar</p>
+          <input type="file" id="file-input" multiple accept=".log,.txt" hidden>
+        </div>
+        <ul id="file-list" class="file-list"></ul>
+      </div>
+      <div class="form-row">
+        <button type="submit" id="submit-btn" class="btn-primary">Analizar</button>
+      </div>
+    </form>
+  </section>
+
+  <section id="progress-section" class="hidden">
+    <h2>Progreso del caso <span id="case-id-display" class="case-id"></span>
+      <button id="stop-btn" class="btn-danger" style="float:right;display:none">Detener</button>
+    </h2>
+    <div id="phase-list" class="phase-list">
+      <div class="phase-item" data-phase="preprocess">
+        <div class="phase-header">
+          <span class="phase-name">Preproceso</span>
+          <span class="phase-status badge-pending">pendiente</span>
+        </div>
+        <div class="phase-meta"></div>
+      </div>
+      <div class="phase-item" data-phase="ingest">
+        <div class="phase-header">
+          <span class="phase-name">Ingesta</span>
+          <span class="phase-status badge-pending">pendiente</span>
+        </div>
+        <div class="phase-meta"></div>
+        <div class="sub-phases"></div>
+      </div>
+      <div class="phase-item" data-phase="triage">
+        <div class="phase-header">
+          <span class="phase-name">Triage</span>
+          <span class="phase-status badge-pending">pendiente</span>
+        </div>
+        <div class="phase-meta"></div>
+      </div>
+      <div class="phase-item" data-phase="rca">
+        <div class="phase-header">
+          <span class="phase-name">Causa Raiz</span>
+          <span class="phase-status badge-pending">pendiente</span>
+        </div>
+        <div class="phase-meta"></div>
+      </div>
+      <div class="phase-item" data-phase="resolution">
+        <div class="phase-header">
+          <span class="phase-name">Resolucion</span>
+          <span class="phase-status badge-pending">pendiente</span>
+        </div>
+        <div class="phase-meta"></div>
+      </div>
+      <div class="phase-item" data-phase="communication">
+        <div class="phase-header">
+          <span class="phase-name">Comunicacion</span>
+          <span class="phase-status badge-pending">pendiente</span>
+        </div>
+        <div class="phase-meta"></div>
+      </div>
+    </div>
+
+    <div id="review-panel" class="review-panel hidden">
+      <h3>Revision humana requerida</h3>
+      <div id="review-hypothesis"></div>
+      <div class="review-controls">
+        <textarea id="review-comment" rows="3" placeholder="Comentarios (opcional)"></textarea>
+        <div class="review-buttons">
+          <button id="approve-btn" class="btn-primary">Aprobar y continuar</button>
+          <button id="reject-btn" class="btn-danger">Rechazar</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="result-links" class="result-links hidden">
+      <a id="report-link" href="#" target="_blank" class="btn-primary">Ver reporte</a>
+      <a id="export-link" href="#" target="_blank" class="btn-secondary">Descargar JSON</a>
+    </div>
+
+    <div id="error-message" class="error-message hidden"></div>
+  </section>
+
+  <section id="cases-list-section">
+    <h2>Casos recientes</h2>
+    <button id="refresh-cases" class="btn-secondary">Actualizar</button>
+    <table id="cases-table">
+      <thead>
+        <tr><th>Caso</th><th>Ticket</th><th>Aplicacion</th><th>Estado</th><th>Severidad</th><th>Creado</th><th>Acciones</th></tr>
+      </thead>
+      <tbody id="cases-tbody"></tbody>
+    </table>
+  </section>
+
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

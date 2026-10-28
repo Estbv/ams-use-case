@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reporte {{ case.id }}</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f5f7fa;color:#1a1a2e;line-height:1.6;padding:20px;max-width:1100px;margin:0 auto}
+h1{font-size:1.6rem;color:#1a1a2e;margin-bottom:4px}
+h2{font-size:1.25rem;margin-bottom:12px;padding-bottom:6px;border-bottom:2px solid #e0e6ed}
+h3{font-size:1.05rem;margin:14px 0 6px;color:#2d3748}
+.header{background:#fff;border-radius:8px;padding:20px 24px;box-shadow:0 1px 3px rgba(0,0,0,.1);margin-bottom:20px}
+.header-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:10px}
+.header-item{font-size:.9rem}.header-item strong{color:#4a5568}
+.badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:.8rem;font-weight:600;color:#fff}
+.badge-ok{background:#38a169}.badge-running{background:#3182ce}.badge-pending{background:#a0aec0}
+.badge-degraded{background:#d69e2e}.badge-failed{background:#e53e3e}.badge-skipped{background:#cbd5e0;color:#4a5568}
+.badge-waiting{background:#805ad5}
+.section{background:#fff;border-radius:8px;padding:20px 24px;box-shadow:0 1px 3px rgba(0,0,0,.1);margin-bottom:16px}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.section-title{font-size:1.25rem;padding:0;border:none}
+.phase-meta{font-size:.85rem;color:#718096}
+.phase-meta span{margin-left:12px}
+table{width:100%;border-collapse:collapse;margin:8px 0;font-size:.88rem}
+th,td{text-align:left;padding:6px 10px;border-bottom:1px solid #e2e8f0}
+th{background:#f7fafc;font-weight:600;color:#4a5568}
+tr:hover{background:#f7fafc}
+.eid{display:inline-block;background:#edf2f7;color:#2b6cb0;padding:1px 6px;border-radius:3px;font-size:.8rem;font-family:monospace;cursor:help;position:relative}
+.eid .tooltip{display:none;position:absolute;bottom:100%;left:0;background:#1a202c;color:#fff;padding:6px 10px;border-radius:4px;font-size:.78rem;white-space:pre-wrap;max-width:400px;z-index:100;font-family:sans-serif;margin-bottom:4px;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.eid:hover .tooltip{display:block}
+.warn-box{background:#fff3cd;border:1px solid #ffeaa7;border-radius:4px;padding:8px 12px;margin:8px 0;font-size:.88rem}
+.error-box{background:#fce8e8;border:1px solid #f5b5b5;border-radius:4px;padding:8px 12px;margin:8px 0;font-size:.88rem}
+.degraded-box{background:#fef3c7;border:1px solid #fbbf24;border-radius:4px;padding:10px 14px;margin:8px 0}
+.degraded-box summary{cursor:pointer;font-weight:600;color:#92400e}
+.degraded-box pre{margin-top:8px;background:#fffbeb;padding:10px;border-radius:4px;overflow-x:auto;font-size:.82rem;white-space:pre-wrap}
+pre.json{background:#1e293b;color:#e2e8f0;padding:12px;border-radius:6px;overflow-x:auto;font-size:.82rem;max-height:400px;overflow-y:auto}
+pre.raw{background:#f7fafc;padding:10px;border-radius:4px;overflow-x:auto;font-size:.82rem;white-space:pre-wrap;max-height:300px;overflow-y:auto}
+.copy-btn{background:#3182ce;color:#fff;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:.8rem;float:right}
+.copy-btn:hover{background:#2c5282}
+.com-text{background:#f7fafc;border-radius:6px;padding:14px;margin:8px 0;white-space:pre-wrap;font-size:.9rem;min-height:40px}
+.timeline-item{display:flex;gap:10px;padding:4px 0;border-bottom:1px solid #edf2f7;font-size:.88rem}
+.timeline-time{font-family:monospace;color:#4a5568;min-width:80px}
+.timeline-role{font-size:.78rem;padding:1px 6px;border-radius:3px;font-weight:600}
+.role-context{background:#e2e8f0;color:#4a5568}.role-trigger{background:#fed7d7;color:#c53030}
+.role-propagation{background:#fef3c7;color:#92400e}.role-impact{background:#dbeafe;color:#1e40af}
+.theme-item{padding:8px 12px;margin:4px 0;border-radius:4px;font-size:.88rem}
+.theme-trigger{background:#fed7d7;border-left:3px solid #e53e3e}
+.theme-symptom{background:#fef3c7;border-left:3px solid #d69e2e}
+.theme-noise{background:#f0f0f0;border-left:3px solid #a0aec0}
+.theme-expected{background:#e6fffa;border-left:3px solid #38a169}
+.hyp-item{padding:10px 14px;margin:6px 0;border:1px solid #e2e8f0;border-radius:6px}
+.hyp-rank{display:inline-block;background:#3182ce;color:#fff;width:22px;height:22px;border-radius:50%;text-align:center;line-height:22px;font-size:.8rem;margin-right:6px}
+.causal-chain{font-size:.85rem;color:#4a5568;margin:4px 0;padding-left:28px}
+.causal-chain span{display:inline-block;margin:0 4px}
+.collapsible summary{cursor:pointer;font-weight:600;padding:6px 0;list-style:none}
+.collapsible summary::-webkit-details-marker{display:none}
+.collapsible summary::before{content:'▶ ';font-size:.8rem;color:#718096}
+.collapsible[open] summary::before{content:'▼ '}
+.audit-entry{padding:10px;border:1px solid #e2e8f0;border-radius:6px;margin:6px 0}
+.audit-entry h4{font-size:.9rem;color:#2d3748;margin-bottom:4px}
+.audit-meta{font-size:.8rem;color:#718096;margin-bottom:6px}
+.audit-meta span{margin-right:12px}
+.muted{color:#a0aec0;font-style:italic}
+.empty{color:#a0aec0;padding:10px 0}
+.risk-low{color:#38a169;font-weight:600}.risk-medium{color:#d69e2e;font-weight:600}.risk-high{color:#e53e3e;font-weight:600}
+.footer{text-align:center;color:#a0aec0;font-size:.8rem;margin-top:20px;padding:10px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Reporte de Incidente</h1>
+  <div class="header-grid">
+    <div class="header-item"><strong>Caso:</strong> {{ case.id }}</div>
+    <div class="header-item"><strong>Ticket:</strong> {{ ticket_id }}</div>
+    <div class="header-item"><strong>Aplicacion:</strong> {{ application }}</div>
+    <div class="header-item"><strong>Severidad:</strong> {% if severity %}<span class="badge badge-{% if severity == 'Critical' %}failed{% elif severity == 'High' %}degraded{% elif severity == 'Medium' %}running{% else %}ok{% endif %}">{{ severity }}</span>{% else %}<span class="muted">N/A</span>{% endif %}</div>
+    <div class="header-item"><strong>Tiempo total:</strong> {{ "%.1f"|format(total_duration) }}s</div>
+    <div class="header-item"><strong>Modelo:</strong> {{ model }}</div>
+    <div class="header-item"><strong>Estado:</strong> <span class="badge badge-{{ case_status_class }}">{{ case.status }}</span></div>
+    <div class="header-item"><strong>Creado:</strong> {{ case.created_at.strftime('%Y-%m-%d %H:%M:%S') if case.created_at else '' }}</div>
+  </div>
+  {% if case.ticket and case.ticket.description %}
+  <h3>Descripcion</h3>
+  <p>{{ case.ticket.description }}</p>
+  {% endif %}
+</div>
+
+{# ── Preproceso ── #}
+<div class="section">
+  <div class="section-header">
+    <h2 class="section-title">Preproceso</h2>
+    <div class="phase-meta">
+      <span class="badge badge-{{ phase_class('preprocess') }}">{{ phase_status('preprocess') }}</span>
+      <span>Duracion: {{ "%.2f"|format(phase_dur('preprocess')) }}s</span>
+    </div>
+  </div>
+  <table>
+    <tr><th>Fuentes</th><td>{{ case.sources|join(', ') if case.sources else 'N/A' }}</td></tr>
+    <tr><th>Signaturas/Firmas</th><td>{{ case.evidence|length }}</td></tr>
+    <tr><th>Enmascarado</th><td>{{ masking_summary }}</td></tr>
+  </table>
+</div>
+
+{# ── Ingesta ── #}
+<div class="section">
+  <div class="section-header">
+    <h2 class="section-title">Ingesta</h2>
+    <div class="phase-meta">
+      <span class="badge badge-{{ phase_class('ingest') }}">{{ phase_status('ingest') }}</span>
+      <span>Duracion: {{ "%.2f"|format(phase_dur('ingest')) }}s</span>
+      {% if phase_tokens('ingest') %}<span>Tokens: {{ phase_tokens('ingest') }}</span>{% endif %}
+    </div>
+  </div>
+  {% if degraded_text('ingest') %}
+  <div class="degraded-box"><summary>Fase degradada</summary><pre>{{ degraded_text('ingest') }}</pre></div>
+  {% endif %}
+  {% if notable_evidence %}
+  <h3>Evidencia Notable</h3>
+  <table>
+    <tr><th>ID</th><th>Nivel</th><th>Componente</th><th>Categoria</th><th>Resumen</th><th>Cantidad</th></tr>
+    {% for ev in notable_evidence %}
+    <tr><td>{{ eid_tag(ev.id) }}</td><td>{{ ev.level }}</td><td>{{ ev.component }}</td><td>{{ ev.category }}</td><td>{{ ev.summary }}</td><td>{{ ev.count }}</td></tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p class="empty">Sin evidencia notable.</p>
+  {% endif %}
+  {% if case.trends %}
+  <h3>Tendencias</h3>
+  <table>
+    <tr><th>Metrica</th><th>Direccion</th><th>Desde</th><th>Hasta</th><th>Comentario</th></tr>
+    {% for t in case.trends %}
+    <tr><td>{{ t.metric }}</td><td>{{ t.direction }}</td><td>{{ t.from }}</td><td>{{ t.to }}</td><td>{{ t.comment }}</td></tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+</div>
+
+{# ── Triage ── #}
+<div class="section">
+  <div class="section-header">
+    <h2 class="section-title">Triage</h2>
+    <div class="phase-meta">
+      <span class="badge badge-{{ phase_class('triage') }}">{{ phase_status('triage') }}</span>
+      <span>Duracion: {{ "%.2f"|format(phase_dur('triage')) }}s</span>
+      {% if phase_tokens('triage') %}<span>Tokens: {{ phase_tokens('triage') }}</span>{% endif %}
+    </div>
+  </div>
+  {% if degraded_text('triage') %}
+  <div class="degraded-box"><summary>Fase degradada</summary><pre>{{ degraded_text('triage') }}</pre></div>
+  {% endif %}
+  {% if case.triage %}
+  {% set t = case.triage %}
+  <h3>Resumen del Incidente</h3>
+  <p>{{ t.incident_summary }}</p>
+  <table>
+    <tr><th>Impacto</th><td>{{ t.user_impact.affected }}</td></tr>
+    <tr><th>Funciona</th><td>{{ t.user_impact.still_working }}</td></tr>
+    <tr><th>Severidad</th><td>{{ t.severity }} — {{ t.severity_reason }}</td></tr>
+    <tr><th>Primera anomalia</th><td>{{ t.first_anomaly.time }} — {{ t.first_anomaly.description }} ({{ eid_tag(t.first_anomaly.evidence_id) }})</td></tr>
+    {% if t.first_user_visible_error %}
+    <tr><th>Primer error visible</th><td>{{ t.first_user_visible_error.time }} ({{ eid_tag(t.first_user_visible_error.evidence_id) }})</td></tr>
+    {% endif %}
+  </table>
+  {% if t.themes %}
+  <h3>Temas</h3>
+  {% for th in t.themes %}
+  <div class="theme-item theme-{{ th.classification }}">
+    <strong>{{ th.id }}: {{ th.title }}</strong> [{{ th.classification }}] — {{ th.explanation }}
+    {% if th.evidence_ids %}<br>Evidencia: {% for eid in th.evidence_ids %}{{ eid_tag(eid) }} {% endfor %}{% endif %}
+  </div>
+  {% endfor %}
+  {% endif %}
+  {% if t.timeline %}
+  <h3>Linea de Tiempo</h3>
+  {% for ev in t.timeline %}
+  <div class="timeline-item">
+    <span class="timeline-time">{{ ev.time }}</span>
+    <span class="timeline-role role-{{ ev.role }}">{{ ev.role }}</span>
+    <span>{{ ev.event }} ({{ ev.source }} {{ eid_tag(ev.evidence_id) }})</span>
+  </div>
+  {% endfor %}
+  {% endif %}
+  {% if t.correlations %}
+  <h3>Correlaciones</h3>
+  <table>
+    <tr><th>Causa</th><th>Efecto</th><th>Explicacion</th></tr>
+    {% for c in t.correlations %}
+    <tr><td>{{ eid_tag(c.cause_id) }}</td><td>{{ eid_tag(c.effect_id) }}</td><td>{{ c.explanation }}</td></tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+  {% if t.warnings %}
+  <div class="warn-box"><strong>Avisos:</strong> {{ t.warnings|join('; ') }}</div>
+  {% endif %}
+  {% else %}
+  <p class="empty">Sin datos de triage.</p>
+  {% endif %}
+</div>
+
+{# ── Causa Raiz ── #}
+<div class="section">
+  <div class="section-header">
+    <h2 class="section-title">Causa Raiz</h2>
+    <div class="phase-meta">
+      <span class="badge badge-{{ phase_class('rca') }}">{{ phase_status('rca') }}</span>
+      <span>Duracion: {{ "%.2f"|format(phase_dur('rca')) }}s</span>
+      {% if phase_tokens('rca') %}<span>Tokens: {{ phase_tokens('rca') }}</span>{% endif %}
+    </div>
+  </div>
+  {% if degraded_text('rca') %}
+  <div class="degraded-box"><summary>Fase degradada</summary><pre>{{ degraded_text('rca') }}</pre></div>
+  {% endif %}
+  {% if case.rca %}
+  {% set r = case.rca %}
+  <h3>Causa Mas Probable</h3>
+  <p>{{ r.most_likely_root_cause }}</p>
+  {% if r.why_misleading %}<p class="muted">Por que puede confundir: {{ r.why_misleading }}</p>{% endif %}
+  {% if r.hypotheses %}
+  <h3>Hipotesis</h3>
+  {% for h in r.hypotheses %}
+  <div class="hyp-item">
+    <span class="hyp-rank">{{ h.rank }}</span><strong>{{ h.title }}</strong>
+    <span class="badge badge-{% if h.confidence == 'High' %}ok{% elif h.confidence == 'Medium' %}degraded{% else %}failed{% endif %}" style="margin-left:8px">{{ h.confidence }}</span>
+    {% if h.known_issue %}<span class="muted" style="margin-left:8px">{{ h.known_issue }}</span>{% endif %}
+    {% if h.causal_chain %}
+    <div class="causal-chain">{% for step in h.causal_chain %}<span>{{ step }}</span>{% if not loop.last %} →{% endif %}{% endfor %}</div>
+    {% endif %}
+    {% if h.supporting_evidence %}
+    <div style="font-size:.85rem;margin-top:4px"><strong>A favor:</strong> {% for e in h.supporting_evidence %}{{ eid_tag(e.evidence_id) }} {{ e.reason }}{% if not loop.last %}; {% endif %}{% endfor %}</div>
+    {% endif %}
+    {% if h.contradicting_evidence %}
+    <div style="font-size:.85rem;margin-top:2px"><strong>En contra:</strong> {% for e in h.contradicting_evidence %}{{ eid_tag(e.evidence_id) }} {{ e.reason }}{% if not loop.last %}; {% endif %}{% endfor %}</div>
+    {% endif %}
+  </div>
+  {% endfor %}
+  {% endif %}
+  {% if r.ruled_out %}
+  <h3>Descartado</h3>
+  <table><tr><th>Item</th><th>Razon</th><th>Evidencia</th><th>Problema conocido</th></tr>
+  {% for ro in r.ruled_out %}<tr><td>{{ ro.item }}</td><td>{{ ro.reason }}</td><td>{{ eid_tag(ro.evidence_id) }}</td><td>{{ ro.known_issue or '' }}</td></tr>{% endfor %}
+  </table>
+  {% endif %}
+  {% if r.rejected_quick_fixes %}
+  <h3>Soluciones rapidas rechazadas</h3>
+  <table><tr><th>Accion</th><th>Por que es incorrecta</th></tr>
+  {% for qf in r.rejected_quick_fixes %}<tr><td>{{ qf.action }}</td><td>{{ qf.why_wrong }}</td></tr>{% endfor %}
+  </table>
+  {% endif %}
+  {% if r.verification_checks %}
+  <h3>Comprobaciones de verificacion</h3>
+  <table><tr><th>Comprobacion</th><th>Tipo</th><th>Comando</th><th>Confirma si</th><th>Descarta si</th><th>Responsable</th></tr>
+  {% for vc in r.verification_checks %}<tr><td>{{ vc.check }}</td><td>{{ vc.type }}</td><td><code>{{ vc.command }}</code></td><td>{{ vc.confirms_if }}</td><td>{{ vc.refutes_if }}</td><td>{{ vc.run_by }}</td></tr>{% endfor %}
+  </table>
+  {% endif %}
+  {% if r.information_gaps %}
+  <div class="warn-box"><strong>Lagos de informacion:</strong> {{ r.information_gaps|join('; ') }}</div>
+  {% endif %}
+  {% if r.needs_human_review %}<div class="warn-box"><strong>Requiere revision humana.</strong></div>{% endif %}
+  {% if r.warnings %}<div class="warn-box"><strong>Avisos:</strong> {{ r.warnings|join('; ') }}</div>{% endif %}
+  {% else %}
+  <p class="empty">Sin datos de causa raiz.</p>
+  {% endif %}
+</div>
+
+{# ── Resolucion ── #}
+<div class="section">
+  <div class="section-header">
+    <h2 class="section-title">Resolucion</h2>
+    <div class="phase-meta">
+      <span class="badge badge-{{ phase_class('resolution') }}">{{ phase_status('resolution') }}</span>
+      <span>Duracion: {{ "%.2f"|format(phase_dur('resolution')) }}s</span>
+      {% if phase_tokens('resolution') %}<span>Tokens: {{ phase_tokens('resolution') }}</span>{% endif %}
+    </div>
+  </div>
+  {% if degraded_text('resolution') %}
+  <div class="degraded-box"><summary>Fase degradada</summary><pre>{{ degraded_text('resolution') }}</pre></div>
+  {% endif %}
+  {% if case.plan %}
+  {% set p = case.plan %}
+  {% if p.immediate_mitigation %}
+  <h3>Mitigacion Inmediata</h3>
+  <table><tr><th>#</th><th>Paso</th><th>Responsable</th><th>Riesgo</th><th>Rollback</th><th>Efecto</th><th>CR</th><th>DBA</th><th>Runbook</th></tr>
+  {% for m in p.immediate_mitigation %}
+  <tr><td>{{ m.order }}</td><td>{{ m.step }}</td><td>{{ m.owner }}</td><td class="risk-{{ m.risk.lower() }}">{{ m.risk }}</td><td>{{ m.rollback }}</td><td>{{ m.expected_effect }}</td><td>{{ 'Si' if m.requires_change_request else 'No' }}</td><td>{{ 'Si' if m.requires_dba else 'No' }}</td><td>{{ m.runbook_ref or '' }}</td></tr>
+  {% endfor %}</table>
+  {% endif %}
+  {% if p.permanent_fix %}
+  <h3>Solucion Definitiva</h3>
+  <table><tr><th>Accion</th><th>Responsable</th><th>Previene</th><th>CR</th></tr>
+  {% for f in p.permanent_fix %}<tr><td>{{ f.action }}</td><td>{{ f.owner }}</td><td>{{ f.prevents }}</td><td>{{ 'Si' if f.requires_change_request else 'No' }}</td></tr>{% endfor %}
+  </table>
+  {% endif %}
+  {% if p.validation %}
+  <h3>Validacion</h3>
+  <table><tr><th>Criterio</th><th>Objetivo</th><th>Como</th></tr>
+  {% for v in p.validation %}<tr><td>{{ v.criterion }}</td><td>{{ v.target }}</td><td>{{ v.how }}</td></tr>{% endfor %}
+  </table>
+  {% endif %}
+  {% if p.risks_and_dependencies %}
+  <h3>Riesgos y Dependencias</h3>
+  <ul>{% for rd in p.risks_and_dependencies %}<li>{{ rd }}</li>{% endfor %}</ul>
+  {% endif %}
+  {% if p.warnings %}<div class="warn-box"><strong>Avisos:</strong> {{ p.warnings|join('; ') }}</div>{% endif %}
+  {% else %}
+  <p class="empty">Sin datos de resolucion.</p>
+  {% endif %}
+</div>
+
+{# ── Comunicacion ── #}
+<div class="section">
+  <div class="section-header">
+    <h2 class="section-title">Comunicacion</h2>
+    <div class="phase-meta">
+      <span class="badge badge-{{ phase_class('communication') }}">{{ phase_status('communication') }}</span>
+      <span>Duracion: {{ "%.2f"|format(phase_dur('communication')) }}s</span>
+      {% if phase_tokens('communication') %}<span>Tokens: {{ phase_tokens('communication') }}</span>{% endif %}
+    </div>
+  </div>
+  {% if degraded_text('communication') %}
+  <div class="degraded-box"><summary>Fase degradada</summary><pre>{{ degraded_text('communication') }}</pre></div>
+  {% endif %}
+  {% if case.communications %}
+  {% set c = case.communications %}
+  <h3>Nota del Ticket <button class="copy-btn" onclick="copyText(this, 'ticket_note')">Copiar</button></h3>
+  <div class="com-text" id="ticket_note">{{ c.ticket_note }}</div>
+  <h3>Comunicado al Negocio <button class="copy-btn" onclick="copyText(this, 'business_update')">Copiar</button></h3>
+  <div class="com-text" id="business_update">{{ c.business_update.text }}{% if c.business_update.next_update_at %}<br><span class="muted">Proxima actualizacion: {{ c.business_update.next_update_at }}</span>{% endif %}</div>
+  <h3>Nota de Escalamiento <button class="copy-btn" onclick="copyText(this, 'escalation_note')">Copiar</button></h3>
+  <div class="com-text" id="escalation_note">{% if c.escalation_note.to %}Para: {{ c.escalation_note.to|join(', ') }}{% endif %}
+{{ c.escalation_note.text }}
+{% if c.escalation_note.requests %}<br><strong>Peticiones:</strong> {{ c.escalation_note.requests|join('; ') }}{% endif %}</div>
+  <h3>Entrada de Runbook <button class="copy-btn" onclick="copyText(this, 'runbook_entry')">Copiar</button></h3>
+  <div class="com-text" id="runbook_entry"><strong>{{ c.runbook_entry.title }}</strong>
+{% if c.runbook_entry.symptoms %}<br><strong>Sintomas:</strong> {{ c.runbook_entry.symptoms|join('; ') }}{% endif %}
+{% if c.runbook_entry.diagnosis %}<br><strong>Diagnostico:</strong> {{ c.runbook_entry.diagnosis|join('; ') }}{% endif %}
+{% if c.runbook_entry.resolution %}<br><strong>Resolucion:</strong> {{ c.runbook_entry.resolution|join('; ') }}{% endif %}
+{% if c.runbook_entry.prevention %}<br><strong>Prevencion:</strong> {{ c.runbook_entry.prevention|join('; ') }}{% endif %}</div>
+  {% if c.warnings %}<div class="warn-box"><strong>Avisos:</strong> {{ c.warnings|join('; ') }}</div>{% endif %}
+  {% else %}
+  <p class="empty">Sin datos de comunicacion.</p>
+  {% endif %}
+</div>
+
+{# ── Auditoria ── #}
+{% if case.audit %}
+<details class="section collapsible">
+  <summary><h2 class="section-title" style="display:inline">Auditoria ({{ case.audit|length }} registros)</h2></summary>
+  {% for a in case.audit %}
+  <div class="audit-entry">
+    <h4>{{ a.agent }} — {{ a.phase }}{% if a.timestamp %} — {{ a.timestamp }}{% endif %}</h4>
+    <div class="audit-meta">
+      <span>Intentos: {{ a.attempts }}</span>
+      <span>Duracion: {{ "%.2f"|format(a.duration) }}s</span>
+      {% if a.tokens %}<span>Tokens: {{ a.tokens.get('total', 0) }}</span>{% endif %}
+      {% if a.warnings %}<span>Avisos: {{ a.warnings|length }}</span>{% endif %}
+    </div>
+    {% if a.warnings %}<div class="warn-box">{{ a.warnings|join('; ') }}</div>{% endif %}
+    {% if a.messages_sent %}
+    <details class="collapsible"><summary>Prompts enviados ({{ a.messages_sent|length }})</summary>
+      {% for msg in a.messages_sent %}<pre class="raw">{{ msg[:2000] }}{% if msg|length > 2000 %}... (truncado){% endif %}</pre>{% endfor %}
+    </details>
+    {% endif %}
+    {% if a.responses %}
+    <details class="collapsible"><summary>Respuestas ({{ a.responses|length }})</summary>
+      {% for resp in a.responses %}<pre class="raw">{{ resp[:2000] }}{% if resp|length > 2000 %}... (truncado){% endif %}</pre>{% endfor %}
+    </details>
+    {% endif %}
+  </div>
+  {% endfor %}
+</details>
+{% endif %}
+
+<div class="footer">Generado por AMS Agentes — {{ case.id }}</div>
+
+<script>
+function copyText(btn, id){
+  var el=document.getElementById(id);
+  var text=el.innerText;
+  navigator.clipboard.writeText(text).then(function(){
+    btn.textContent='Copiado';setTimeout(function(){btn.textContent='Copiar'},2000);
+  });
+}
+</script>
+</body>
+</html>

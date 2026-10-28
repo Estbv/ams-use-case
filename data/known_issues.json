@@ -1,0 +1,14 @@
+[
+  {"id": "KI-001", "title": "Pool de conexiones agotado", "pattern": "Connection is not available|pool pressure",
+   "guidance": "Casi siempre es un SÍNTOMA de llamadas lentas a la base de datos, no la causa raíz. Revisar el SQL de larga duración antes de aumentar el pool."},
+  {"id": "KI-002", "title": "ORA-12170 desde la red de reportes", "pattern": "ORA-12170",
+   "guidance": "Timeout conocido del firewall en 10.20.8.x, no relacionado con las aplicaciones de clientes. Derivar al equipo de Redes."},
+  {"id": "KI-003", "title": "Nginx 504 upstream timed out", "pattern": "upstream timed out",
+   "guidance": "El backend está lento; investigar la aplicación, no Nginx."},
+  {"id": "KI-004", "title": "Falla de migración Flyway ignorada", "pattern": "Flyway migration failure ignored",
+   "guidance": "checkout-service se ejecuta con fail-on-error=false; una migración fallida deja, sin avisar, índices o columnas sin crear."},
+  {"id": "KI-005", "title": "Alerta de tablespace", "pattern": "Tablespace .* usage",
+   "guidance": "Por debajo del 90% es informativa; la gestionan los DBA cada semana."},
+  {"id": "KI-006", "title": "Connection refused / 502 durante un despliegue", "pattern": "Connection refused",
+   "guidance": "Esperado durante unos 60 s mientras la aplicación se reinicia."}
+]

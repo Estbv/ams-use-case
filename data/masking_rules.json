@@ -1,0 +1,4 @@
+[
+  {"name": "customer_id", "pattern": "CUST-\\d{8}", "replacement": "CUST-***"},
+  {"name": "account_id", "pattern": "ACC-\\d{10}", "replacement": "ACC-***"}
+]

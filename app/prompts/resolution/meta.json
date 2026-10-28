@@ -1,0 +1,1 @@
+{"version": "1.0.0", "agent": "resolution", "output_model": "ResolutionOutput", "tools": ["search_runbooks", "get_change_calendar"]}

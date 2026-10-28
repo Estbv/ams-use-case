@@ -1,0 +1,109 @@
+{
+  "$defs": {
+    "BusinessUpdate": {
+      "properties": {
+        "text": {
+          "default": "",
+          "title": "Text",
+          "type": "string"
+        },
+        "next_update_at": {
+          "default": "",
+          "title": "Next Update At",
+          "type": "string"
+        }
+      },
+      "title": "BusinessUpdate",
+      "type": "object"
+    },
+    "EscalationNote": {
+      "properties": {
+        "to": {
+          "items": {
+            "type": "string"
+          },
+          "title": "To",
+          "type": "array"
+        },
+        "text": {
+          "default": "",
+          "title": "Text",
+          "type": "string"
+        },
+        "requests": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Requests",
+          "type": "array"
+        }
+      },
+      "title": "EscalationNote",
+      "type": "object"
+    },
+    "RunbookEntry": {
+      "properties": {
+        "title": {
+          "default": "",
+          "title": "Title",
+          "type": "string"
+        },
+        "symptoms": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Symptoms",
+          "type": "array"
+        },
+        "diagnosis": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Diagnosis",
+          "type": "array"
+        },
+        "resolution": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Resolution",
+          "type": "array"
+        },
+        "prevention": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Prevention",
+          "type": "array"
+        }
+      },
+      "title": "RunbookEntry",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "ticket_note": {
+      "default": "",
+      "title": "Ticket Note",
+      "type": "string"
+    },
+    "business_update": {
+      "$ref": "#/$defs/BusinessUpdate"
+    },
+    "escalation_note": {
+      "$ref": "#/$defs/EscalationNote"
+    },
+    "runbook_entry": {
+      "$ref": "#/$defs/RunbookEntry"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    }
+  },
+  "title": "CommunicationOutput",
+  "type": "object"
+}

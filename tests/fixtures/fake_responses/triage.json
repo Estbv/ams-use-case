@@ -1,0 +1,9 @@
+{
+  "responses": [
+    {
+      "content": "{\"incident_summary\": \"Checkout falla por agotamiento del pool de conexiones.\", \"user_impact\": {\"affected\": \"Checkout no disponible\", \"still_working\": \"Navegacion de productos\"}, \"severity\": \"Critical\", \"severity_reason\": \"Afecta al checkout y pagos\", \"first_anomaly\": {\"time\": \"13:55:39\", \"evidence_id\": \"E011\", \"description\": \"Migracion fallida ORA-00054\"}, \"first_user_visible_error\": {\"time\": \"14:06:02\", \"evidence_id\": \"E026\"}, \"themes\": [{\"id\": \"T1\", \"title\": \"Migracion fallida\", \"classification\": \"trigger\", \"evidence_ids\": [\"E011\"], \"explanation\": \"ORA-00054 bloquea la migracion\"}], \"timeline\": [{\"time\": \"13:55:39\", \"source\": \"checkout-service\", \"evidence_id\": \"E011\", \"event\": \"Migracion fallida\", \"role\": \"trigger\"}], \"correlations\": [{\"cause_id\": \"E011\", \"effect_id\": \"E026\", \"explanation\": \"Migracion fallida causa pool agotado\"}], \"warnings\": []}",
+      "tool_calls": null,
+      "tokens": {"prompt": 200, "completion": 100, "total": 300}
+    }
+  ]
+}

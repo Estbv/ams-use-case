@@ -1,0 +1,9 @@
+{
+  "responses": [
+    {
+      "content": "{\"immediate_mitigation\": [{\"order\": 1, \"step\": \"Desactivar feature flag order-history-enrichment\", \"owner\": \"AMS\", \"risk\": \"Low\", \"rollback\": \"Reactivar flag\", \"expected_effect\": \"Evita full scan\", \"requires_change_request\": false, \"requires_dba\": false, \"runbook_ref\": null}], \"permanent_fix\": [{\"action\": \"Recrear indice IDX_ORDER_ITEMS_CUST_REF\", \"owner\": \"DBA\", \"prevents\": \"Recurrencia\", \"requires_change_request\": true}], \"validation\": [{\"criterion\": \"Latencia de checkout\", \"target\": \"< 2s\", \"how\": \"Probar endpoint\"}], \"risks_and_dependencies\": [\"Requiere ventana de cambio\"], \"warnings\": []}",
+      "tool_calls": null,
+      "tokens": {"prompt": 150, "completion": 80, "total": 230}
+    }
+  ]
+}

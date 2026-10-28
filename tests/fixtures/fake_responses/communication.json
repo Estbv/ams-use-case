@@ -1,0 +1,9 @@
+{
+  "responses": [
+    {
+      "content": "{\"ticket_note\": \"Causa probable: migracion fallida. Accion: desactivar feature flag.\", \"business_update\": {\"text\": \"El checkout esta siendo restablecido.\", \"next_update_at\": \"14:40\"}, \"escalation_note\": {\"to\": [\"Desarrollo\", \"DBA\"], \"text\": \"Se necesita recrear indice.\", \"requests\": [\"Confirmar indice faltante\"]}, \"runbook_entry\": {\"title\": \"Checkout lento por full scan\", \"symptoms\": [\"Pool agotado\", \"Checkout timeout\"], \"diagnosis\": [\"Verificar migracion Flyway\", \"Verificar indice\"], \"resolution\": [\"Desactivar feature flag\", \"Recrear indice\"], \"prevention\": [\"Activar fail-on-error en Flyway\"]}, \"warnings\": []}",
+      "tool_calls": null,
+      "tokens": {"prompt": 180, "completion": 100, "total": 280}
+    }
+  ]
+}

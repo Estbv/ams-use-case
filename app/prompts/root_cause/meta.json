@@ -1,0 +1,1 @@
+{"version": "1.0.0", "agent": "root_cause", "output_model": "RcaOutput", "tools": ["search_known_issues", "get_evidence_detail", "get_recent_changes"]}

@@ -1,0 +1,9 @@
+{
+  "responses": [
+    {
+      "content": "{\"incident_summary\": \"Resumen simulado.\", \"user_impact\": {\"affected\": \"N/A\", \"still_working\": \"N/A\"}, \"severity\": \"Medium\", \"severity_reason\": \"Prueba\", \"first_anomaly\": {\"time\": \"00:00:00\", \"evidence_id\": \"E001\", \"description\": \"N/A\"}, \"first_user_visible_error\": null, \"themes\": [], \"timeline\": [], \"correlations\": [], \"warnings\": []}",
+      "tool_calls": null,
+      "tokens": {"prompt": 10, "completion": 20, "total": 30}
+    }
+  ]
+}

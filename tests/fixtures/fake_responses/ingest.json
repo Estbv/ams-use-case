@@ -1,0 +1,9 @@
+{
+  "responses": [
+    {
+      "content": "{\"source\": \"checkout-service\", \"source_type\": \"application\", \"detected_format\": \"Spring Boot\", \"time_range\": {\"start\": \"2026-10-20 13:48:21\", \"end\": \"2026-10-20 14:10:00\"}, \"evidence\": [{\"id\": \"E001\", \"time_first\": \"13:48:21\", \"time_last\": \"13:48:21\", \"count\": 1, \"level\": \"WARN\", \"component\": \"PaymentGatewayClient\", \"category\": \"error\", \"summary\": \"Gateway soft-decline\", \"notable\": false, \"notable_reason\": null}], \"trends\": [], \"data_quality\": [], \"residual_sensitive_data\": [], \"warnings\": []}",
+      "tool_calls": null,
+      "tokens": {"prompt": 100, "completion": 50, "total": 150}
+    }
+  ]
+}

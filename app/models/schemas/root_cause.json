@@ -1,0 +1,242 @@
+{
+  "$defs": {
+    "EvidenceRef": {
+      "properties": {
+        "evidence_id": {
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "reason": {
+          "default": "",
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "evidence_id"
+      ],
+      "title": "EvidenceRef",
+      "type": "object"
+    },
+    "Hypothesis": {
+      "properties": {
+        "rank": {
+          "title": "Rank",
+          "type": "integer"
+        },
+        "title": {
+          "default": "",
+          "title": "Title",
+          "type": "string"
+        },
+        "confidence": {
+          "enum": [
+            "High",
+            "Medium",
+            "Low"
+          ],
+          "title": "Confidence",
+          "type": "string"
+        },
+        "causal_chain": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Causal Chain",
+          "type": "array"
+        },
+        "supporting_evidence": {
+          "items": {
+            "$ref": "#/$defs/EvidenceRef"
+          },
+          "title": "Supporting Evidence",
+          "type": "array"
+        },
+        "contradicting_evidence": {
+          "items": {
+            "$ref": "#/$defs/EvidenceRef"
+          },
+          "title": "Contradicting Evidence",
+          "type": "array"
+        },
+        "known_issue": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Known Issue"
+        }
+      },
+      "required": [
+        "rank",
+        "confidence"
+      ],
+      "title": "Hypothesis",
+      "type": "object"
+    },
+    "RejectedQuickFix": {
+      "properties": {
+        "action": {
+          "default": "",
+          "title": "Action",
+          "type": "string"
+        },
+        "why_wrong": {
+          "default": "",
+          "title": "Why Wrong",
+          "type": "string"
+        }
+      },
+      "title": "RejectedQuickFix",
+      "type": "object"
+    },
+    "RuledOutItem": {
+      "properties": {
+        "item": {
+          "default": "",
+          "title": "Item",
+          "type": "string"
+        },
+        "reason": {
+          "default": "",
+          "title": "Reason",
+          "type": "string"
+        },
+        "evidence_id": {
+          "default": "",
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "known_issue": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Known Issue"
+        }
+      },
+      "title": "RuledOutItem",
+      "type": "object"
+    },
+    "VerificationCheck": {
+      "properties": {
+        "check": {
+          "default": "",
+          "title": "Check",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "sql",
+            "log_query",
+            "console"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "command": {
+          "default": "",
+          "title": "Command",
+          "type": "string"
+        },
+        "confirms_if": {
+          "default": "",
+          "title": "Confirms If",
+          "type": "string"
+        },
+        "refutes_if": {
+          "default": "",
+          "title": "Refutes If",
+          "type": "string"
+        },
+        "run_by": {
+          "default": "AMS",
+          "enum": [
+            "DBA",
+            "AMS",
+            "Desarrollo",
+            "Infraestructura"
+          ],
+          "title": "Run By",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "VerificationCheck",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "hypotheses": {
+      "items": {
+        "$ref": "#/$defs/Hypothesis"
+      },
+      "title": "Hypotheses",
+      "type": "array"
+    },
+    "most_likely_root_cause": {
+      "default": "",
+      "title": "Most Likely Root Cause",
+      "type": "string"
+    },
+    "why_misleading": {
+      "default": "",
+      "title": "Why Misleading",
+      "type": "string"
+    },
+    "ruled_out": {
+      "items": {
+        "$ref": "#/$defs/RuledOutItem"
+      },
+      "title": "Ruled Out",
+      "type": "array"
+    },
+    "rejected_quick_fixes": {
+      "items": {
+        "$ref": "#/$defs/RejectedQuickFix"
+      },
+      "title": "Rejected Quick Fixes",
+      "type": "array"
+    },
+    "verification_checks": {
+      "items": {
+        "$ref": "#/$defs/VerificationCheck"
+      },
+      "title": "Verification Checks",
+      "type": "array"
+    },
+    "information_gaps": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Information Gaps",
+      "type": "array"
+    },
+    "needs_human_review": {
+      "default": false,
+      "title": "Needs Human Review",
+      "type": "boolean"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    }
+  },
+  "title": "RcaOutput",
+  "type": "object"
+}

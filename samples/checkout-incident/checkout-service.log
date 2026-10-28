@@ -1,0 +1,25 @@
+2026-10-20 13:48:21.114  WARN 4121 --- [nio-8080-exec-3] c.s.checkout.client.PaymentGatewayClient : Gateway soft-decline orderId=ORD-883990 card=4111 1111 1111 1111 reason=INSUFFICIENT_FUNDS
+2026-10-20 13:54:40.002  INFO 4121 --- [ShutdownHook] c.s.checkout.lifecycle.ShutdownHook : Received SIGTERM - graceful shutdown for deployment CHG-55821
+2026-10-20 13:55:02.310  INFO 5377 --- [main] c.s.checkout.CheckoutApplication : Starting CheckoutApplication v2.14.0 using Java 17.0.9 with PID 5377
+2026-10-20 13:55:06.871  INFO 5377 --- [main] c.s.checkout.config.DataSourceConfig : DataSource url=jdbc:oracle:thin:@shopdb-scan:1521/SHOPDB user=CHECKOUT_APP password=Ch3ck0ut!2026
+2026-10-20 13:55:09.020  INFO 5377 --- [main] o.f.core.internal.command.DbMigrate : Migrating schema "SHOP" to version "2.14.1 - add idx order items customer ref"
+2026-10-20 13:55:39.442  WARN 5377 --- [main] o.f.core.internal.command.DbMigrate : Migration of schema "SHOP" to version "2.14.1" failed! ORA-00054: resource busy and acquire with NOWAIT specified or timeout expired
+2026-10-20 13:55:39.450  WARN 5377 --- [main] c.s.checkout.config.FlywayConfig : Flyway migration failure ignored (spring.flyway.fail-on-error=false). Continuing startup.
+2026-10-20 13:55:45.120  INFO 5377 --- [main] c.s.checkout.CheckoutApplication : Started CheckoutApplication in 43.1 seconds
+2026-10-20 13:55:46.003  INFO 5377 --- [main] c.s.checkout.config.FeatureFlags : Feature flag 'order-history-enrichment' ENABLED (new in 2.14.0)
+2026-10-20 13:57:14.210  WARN 5377 --- [nio-8080-exec-12] c.s.checkout.service.OrderHistoryEnricher : Slow query detected: findRecentItemsByCustomerRef took 1980ms (threshold 1000ms)
+2026-10-20 13:57:14.260  INFO 5377 --- [nio-8080-exec-12] c.s.checkout.web.CheckoutController : POST /api/checkout completed in 2210ms orderId=ORD-884012 customer=jane.doe41@example.com status=200
+2026-10-20 14:00:31.508  WARN 5377 --- [nio-8080-exec-27] c.s.checkout.service.OrderHistoryEnricher : Slow query detected: findRecentItemsByCustomerRef took 6420ms (threshold 1000ms)
+2026-10-20 14:02:00.000  WARN 5377 --- [pool-monitor] c.s.checkout.monitoring.PoolMonitor : Connection pool pressure: HikariPool-1 active=14/20 idle=6 waiting=0
+2026-10-20 14:04:00.000  WARN 5377 --- [pool-monitor] c.s.checkout.monitoring.PoolMonitor : Connection pool pressure: HikariPool-1 active=20/20 idle=0 waiting=5
+2026-10-20 14:04:30.001  INFO 5377 --- [scheduling-1] c.s.checkout.monitoring.HealthReporter : Health check /actuator/health status=UP db=UP diskSpace=UP
+2026-10-20 14:06:02.877 ERROR 5377 --- [nio-8080-exec-33] c.s.checkout.web.GlobalExceptionHandler : Checkout failed orderId=ORD-884091 customer=li.wei7@example.com - Unable to acquire JDBC Connection
+org.springframework.dao.DataAccessResourceFailureException: Unable to acquire JDBC Connection
+	at com.shop.checkout.service.OrderHistoryEnricher.findRecentItemsByCustomerRef(OrderHistoryEnricher.java:88)
+	at com.shop.checkout.service.CheckoutService.placeOrder(CheckoutService.java:142)
+Caused by: java.sql.SQLTransientConnectionException: HikariPool-1 - Connection is not available, request timed out after 30000ms.
+2026-10-20 14:06:40.115 ERROR 5377 --- [nio-8080-exec-9] c.s.checkout.web.GlobalExceptionHandler : Checkout failed orderId=ORD-884094 customer=maria.garcia3@example.com - Unable to acquire JDBC Connection
+2026-10-20 14:07:58.402 ERROR 5377 --- [nio-8080-exec-21] c.s.checkout.web.GlobalExceptionHandler : Checkout failed orderId=ORD-884101 customer=omar.ali15@example.com - Unable to acquire JDBC Connection
+2026-10-20 14:08:12.330  WARN 5377 --- [nio-8080-exec-4] c.s.checkout.service.OrderHistoryEnricher : Slow query detected: findRecentItemsByCustomerRef took 18750ms (threshold 1000ms)
+2026-10-20 14:09:00.001  INFO 5377 --- [scheduling-1] c.s.checkout.monitoring.HealthReporter : Health check /actuator/health status=UP db=UP diskSpace=UP
+2026-10-20 14:10:00.000  WARN 5377 --- [pool-monitor] c.s.checkout.monitoring.PoolMonitor : Connection pool pressure: HikariPool-1 active=20/20 idle=0 waiting=23

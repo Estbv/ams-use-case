@@ -1,0 +1,45 @@
+# Entorno
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+.venv/
+venv/
+env/
+
+# Secretos y credenciales (claves, certificados, tokens)
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+secrets/
+credentials/
+*.secret
+*.token
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Expedientes (pueden contener datos sensibles de clientes)
+cases/
+
+# Pytest
+.pytest_cache/
+
+# IDE / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

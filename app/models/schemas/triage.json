@@ -1,0 +1,230 @@
+{
+  "$defs": {
+    "Correlation": {
+      "properties": {
+        "cause_id": {
+          "title": "Cause Id",
+          "type": "string"
+        },
+        "effect_id": {
+          "title": "Effect Id",
+          "type": "string"
+        },
+        "explanation": {
+          "default": "",
+          "title": "Explanation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "cause_id",
+        "effect_id"
+      ],
+      "title": "Correlation",
+      "type": "object"
+    },
+    "FirstAnomaly": {
+      "properties": {
+        "time": {
+          "default": "",
+          "title": "Time",
+          "type": "string"
+        },
+        "evidence_id": {
+          "default": "",
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        }
+      },
+      "title": "FirstAnomaly",
+      "type": "object"
+    },
+    "FirstUserVisibleError": {
+      "properties": {
+        "time": {
+          "default": "",
+          "title": "Time",
+          "type": "string"
+        },
+        "evidence_id": {
+          "default": "",
+          "title": "Evidence Id",
+          "type": "string"
+        }
+      },
+      "title": "FirstUserVisibleError",
+      "type": "object"
+    },
+    "Theme": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "default": "",
+          "title": "Title",
+          "type": "string"
+        },
+        "classification": {
+          "enum": [
+            "trigger",
+            "symptom",
+            "noise",
+            "expected"
+          ],
+          "title": "Classification",
+          "type": "string"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "explanation": {
+          "default": "",
+          "title": "Explanation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "classification"
+      ],
+      "title": "Theme",
+      "type": "object"
+    },
+    "TimelineEvent": {
+      "properties": {
+        "time": {
+          "default": "",
+          "title": "Time",
+          "type": "string"
+        },
+        "source": {
+          "default": "",
+          "title": "Source",
+          "type": "string"
+        },
+        "evidence_id": {
+          "default": "",
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "event": {
+          "default": "",
+          "title": "Event",
+          "type": "string"
+        },
+        "role": {
+          "default": "context",
+          "enum": [
+            "context",
+            "trigger",
+            "propagation",
+            "impact"
+          ],
+          "title": "Role",
+          "type": "string"
+        }
+      },
+      "title": "TimelineEvent",
+      "type": "object"
+    },
+    "UserImpact": {
+      "properties": {
+        "affected": {
+          "default": "",
+          "title": "Affected",
+          "type": "string"
+        },
+        "still_working": {
+          "default": "",
+          "title": "Still Working",
+          "type": "string"
+        }
+      },
+      "title": "UserImpact",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "incident_summary": {
+      "default": "",
+      "title": "Incident Summary",
+      "type": "string"
+    },
+    "user_impact": {
+      "$ref": "#/$defs/UserImpact"
+    },
+    "severity": {
+      "enum": [
+        "Low",
+        "Medium",
+        "High",
+        "Critical"
+      ],
+      "title": "Severity",
+      "type": "string"
+    },
+    "severity_reason": {
+      "default": "",
+      "title": "Severity Reason",
+      "type": "string"
+    },
+    "first_anomaly": {
+      "$ref": "#/$defs/FirstAnomaly"
+    },
+    "first_user_visible_error": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/FirstUserVisibleError"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "themes": {
+      "items": {
+        "$ref": "#/$defs/Theme"
+      },
+      "title": "Themes",
+      "type": "array"
+    },
+    "timeline": {
+      "items": {
+        "$ref": "#/$defs/TimelineEvent"
+      },
+      "title": "Timeline",
+      "type": "array"
+    },
+    "correlations": {
+      "items": {
+        "$ref": "#/$defs/Correlation"
+      },
+      "title": "Correlations",
+      "type": "array"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "severity"
+  ],
+  "title": "TriageOutput",
+  "type": "object"
+}

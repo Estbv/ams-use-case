@@ -1,0 +1,2 @@
+2026/10/20 13:54:52 [error] 811#811: *77116 connect() failed (111: Connection refused) while connecting to upstream, client: 203.0.113.24, request: "POST /api/checkout HTTP/1.1"
+2026/10/20 14:09:47 [error] 811#811: *76703 upstream timed out (110: Connection timed out) while reading response header from upstream, client: 198.51.100.17, request: "POST /api/checkout HTTP/1.1"

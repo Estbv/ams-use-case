@@ -1,0 +1,14 @@
+{
+  "responses": [
+    {
+      "content": "Esto no es JSON valido",
+      "tool_calls": null,
+      "tokens": {"prompt": 100, "completion": 10, "total": 110}
+    },
+    {
+      "content": "{\"hypotheses\": [{\"rank\": 1, \"title\": \"Migracion Flyway fallida\", \"confidence\": \"High\", \"causal_chain\": [\"Migracion ORA-00054 [E011]\", \"Pool agotado [E026]\"], \"supporting_evidence\": [{\"evidence_id\": \"E011\", \"reason\": \"ORA-00054\"}], \"contradicting_evidence\": [], \"known_issue\": \"KI-004\"}], \"most_likely_root_cause\": \"Migracion Flyway fallida dejo indice sin crear.\", \"why_misleading\": \"El pool agotado parece la causa pero es sintoma.\", \"ruled_out\": [{\"item\": \"Pool pequeno\", \"reason\": \"El pool se agota por lentitud\", \"evidence_id\": \"E021\", \"known_issue\": \"KI-001\"}], \"rejected_quick_fixes\": [{\"action\": \"Aumentar pool\", \"why_wrong\": \"No resuelve el full scan\"}], \"verification_checks\": [{\"check\": \"Verificar indice\", \"type\": \"sql\", \"command\": \"SELECT * FROM ALL_INDEXES\", \"confirms_if\": \"indice no existe\", \"refutes_if\": \"indice existe\", \"run_by\": \"DBA\"}], \"information_gaps\": [], \"needs_human_review\": false, \"warnings\": []}",
+      "tool_calls": null,
+      "tokens": {"prompt": 120, "completion": 40, "total": 160}
+    }
+  ]
+}
