@@ -1,0 +1,136 @@
+{
+  "case_id": "session-service-incident",
+  "title": "Redis connection leak en ParallelSessionValidator tras despliegue v3.2.0",
+  "severity": "Critical",
+
+  "root_cause": {
+    "summary": "El despliegue v3.2.0 (CHG-77231) introdujo un connection leak en la clase ParallelSessionValidator. El nuevo codigo adquiere conexiones Redis para validacion paralela pero nunca las libera al pool. Las conexiones se acumulan hasta agotar el pool (maxTotal=50), provocando que todas las validaciones de sesion fallen con 'Could not get a resource from the pool'.",
+    "category": "code_defect",
+    "trigger": "Feature flag 'parallel-session-validation' habilitado en v3.2.0",
+    "component": "ParallelSessionValidator.java:72",
+    "change_id": "CHG-77231",
+    "deployed_at": "2026-10-28T09:52:30",
+    "first_symptom_at": "2026-10-28T09:55:00",
+    "first_error_at": "2026-10-28T10:04:12",
+    "mechanism": "Cada request POST /api/session/validate adquiere una conexion Redis via ParallelSessionValidator.validateParallel() pero no llama pool.returnResource(). Las conexiones quedan marcadas como active permanentemente. Con ~50 requests se agota el pool."
+  },
+
+  "causal_chain": [
+    "Despliegue v3.2.0 habilita parallel-session-validation",
+    "ParallelSessionValidator adquiere conexiones Redis sin liberarlas",
+    "Pool de Jedis se agota (50/50 active, 0 idle)",
+    "Nuevos requests esperan 2000ms y fallan con JedisConnectionException",
+    "Nginx recibe 503 del backend y propaga al cliente",
+    "Health check pasa de UP a DEGRADED a DOWN"
+  ],
+
+  "hypotheses": [
+    {
+      "rank": 1,
+      "title": "Connection leak en ParallelSessionValidator (v3.2.0)",
+      "confidence": "High",
+      "is_correct": true,
+      "supporting_evidence": [
+        "DEBUG logs muestran 'Acquired Redis connection' sin correspondiente 'Released'",
+        "Pool monitor muestra active subiendo de 12 a 50 sin bajar",
+        "Inicio del problema coincide con despliegue CHG-77231 (09:52)",
+        "Feature flag parallel-session-validation habilitado a las 09:52:39",
+        "Errores JedisConnectionException: Could not get a resource from the pool"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Redis server caido o inaccesible",
+      "confidence": "Low",
+      "is_correct": false,
+      "why_wrong": "Redis responde OK en health checks. BGSAVE completa normalmente. El problema es del lado del cliente (pool), no del servidor."
+    },
+    {
+      "rank": 3,
+      "title": "Pico de trafico saturando el servicio",
+      "confidence": "Low",
+      "is_correct": false,
+      "why_wrong": "El numero de requests no aumenta significativamente. El pool se agota por conexiones que no se liberan, no por volumen."
+    },
+    {
+      "rank": 4,
+      "title": "Redis maxclients alcanzado",
+      "confidence": "Medium",
+      "is_correct": false,
+      "why_wrong": "maxclients=10000 se alcanza como CONSECUENCIA del leak (cada conexion abandonada cuenta como cliente activo). La causa raiz es el leak, no el limite de Redis."
+    },
+    {
+      "rank": 5,
+      "title": "BGSAVE causando latencia",
+      "confidence": "Low",
+      "is_correct": false,
+      "why_wrong": "BGSAVE completa en 2.3s a las 10:00:02. Los errores comienzan a las 10:04, 4 minutos despues. No hay correlacion temporal."
+    }
+  ],
+
+  "red_herrings": [
+    {
+      "description": "Redis memory al 85.3%",
+      "why_not_root_cause": "El memory usage sube porque las conexiones abandonadas mantienen buffers activos, pero 85% no supera el threshold critico. Es sintoma del leak."
+    },
+    {
+      "description": "Connected clients subiendo a 9987",
+      "why_not_root_cause": "Cada conexion del pool que no se libera cuenta como un cliente conectado. Es consecuencia directa del leak, no causa independiente."
+    },
+    {
+      "description": "BGSAVE a las 10:00",
+      "why_not_root_cause": "Completa en 2.3s sin errores. Los problemas empiezan 4 minutos despues. Causalidad temporal no sostenible."
+    },
+    {
+      "description": "Slow Redis operations (1850ms, 2400ms, 3200ms)",
+      "why_not_root_cause": "La lentitud es porque el pool esta casi agotado y los threads esperan conexiones disponibles. Sintoma, no causa."
+    }
+  ],
+
+  "verification_checks": [
+    {
+      "check": "Confirmar que ParallelSessionValidator no llama returnResource/close",
+      "command": "grep -n 'returnResource\\|close\\|release' ParallelSessionValidator.java",
+      "confirms_if": "no hay llamadas o estan en unreachable code",
+      "refutes_if": "hay returnResource en el finally block del metodo validateParallel"
+    },
+    {
+      "check": "Verificar conexiones activas en el pool antes y despues de un request",
+      "command": "curl localhost:8080/actuator/metrics/jedis.pool.active",
+      "confirms_if": "active sube con cada request y no baja",
+      "refutes_if": "active vuelve al baseline despues de cada request"
+    },
+    {
+      "check": "Revisar el diff del despliegue CHG-77231",
+      "command": "git log --oneline v3.1.0..v3.2.0 -- ParallelSessionValidator.java",
+      "confirms_if": "el metodo validateParallel fue anadido o modificado",
+      "refutes_if": "la clase no cambio en v3.2.0"
+    }
+  ],
+
+  "expected_resolution": {
+    "immediate_mitigation": "Desactivar feature flag 'parallel-session-validation' para detener el leak. Reiniciar session-service para liberar las conexiones abandonadas.",
+    "permanent_fix": "Anadir try-finally con pool.returnResource() en ParallelSessionValidator.validateParallel(). Anadir test de integracion que verifique que el pool vuelve al baseline despues de N requests.",
+    "rollback": "Rollback a v3.1.0 si desactivar el feature flag no es suficiente"
+  },
+
+  "scoring": {
+    "must_identify": [
+      "Connection leak (conexiones adquiridas sin liberar)",
+      "ParallelSessionValidator como componente defectuoso",
+      "CHG-77231 / v3.2.0 como trigger",
+      "Pool exhaustion como mecanismo de fallo"
+    ],
+    "must_not_confuse_with": [
+      "Redis server down (Redis esta UP)",
+      "Network issue (no hay packet loss ni timeout de red)",
+      "BGSAVE (completa normalmente)",
+      "Traffic spike (no hay aumento de trafico)"
+    ],
+    "partial_credit_for": [
+      "Identificar pool exhaustion pero no el leak",
+      "Identificar el despliegue como trigger pero no el mecanismo",
+      "Identificar Redis como area pero confundir servidor con cliente"
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "ticket_id": "INC-2026-20155",
+  "application": "session-service (API3.2.0 using Java 17.0.9 with PID 9203, Redis pool Jedis maxTotal=50 maxIdle=10 minIdle=5, Redis 7.2.1 on redis-prod-01:6379 maxclients=10000 maxmemory=4gb, Nginx gateway on :8080)",
+  "reported_at": "2026-10-28 10:10",
+  "description": "Los usuarios no pueden iniciar sesion ni validar sesiones activas. La app movil muestra 'Sesion no disponible' desde aproximadamente las 10:04. El servicio de productos y el catalogo funcionan normalmente. Solo afecta a endpoints autenticados (/api/session/*).",
+  "recent_changes": "Despliegue v3.2.0 de session-service a las 09:52 (CHG-77231). Incluye feature flag 'parallel-session-validation' y aumento de session-cache-ttl de 120s a 300s.",
+  "environment": "Java 17 / Spring Boot 3, Redis 7.2.1 (Jedis pool maxTotal=50), Nginx gateway",
+  "business_rules": "Todo lo que afecte a la autenticacion o sesiones de usuario es Critico"
+}

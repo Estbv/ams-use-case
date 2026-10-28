@@ -1,0 +1,76 @@
+2026-10-28 09:48:12.003  INFO 8841 --- [nio-8080-exec-5] c.s.session.web.SessionController : POST /api/session/validate completed in 45ms sessionId=S-88412 userId=u-4471 status=200
+2026-10-28 09:48:15.221  INFO 8841 --- [nio-8080-exec-8] c.s.session.web.SessionController : POST /api/session/validate completed in 38ms sessionId=S-88413 userId=u-2207 status=200
+2026-10-28 09:48:18.444  INFO 8841 --- [nio-8080-exec-2] c.s.session.web.SessionController : POST /api/session/validate completed in 52ms sessionId=S-88414 userId=u-9931 status=200
+2026-10-28 09:50:00.001  INFO 8841 --- [scheduling-1] c.s.session.monitoring.HealthReporter : Health check status=UP redis=UP db=UP
+2026-10-28 09:51:33.870  INFO 8841 --- [nio-8080-exec-11] c.s.session.web.SessionController : POST /api/session/validate completed in 41ms sessionId=S-88420 userId=u-3308 status=200
+2026-10-28 09:52:00.002  INFO 8841 --- [ShutdownHook] c.s.session.lifecycle.ShutdownHook : Received SIGTERM - graceful shutdown for deployment CHG-77231
+2026-10-28 09:52:30.110  INFO 9203 --- [main] c.s.session.SessionApplication : Starting SessionApplication v3.2.0 using Java 17.0.9 with PID 9203
+2026-10-28 09:52:34.502  INFO 9203 --- [main] c.s.session.config.RedisConfig : Redis pool configured: maxTotal=50 maxIdle=10 minIdle=5 timeout=2000ms host=redis-prod-01 port=6379
+2026-10-28 09:52:38.001  INFO 9203 --- [main] c.s.session.SessionApplication : Started SessionApplication in 8.2 seconds
+2026-10-28 09:52:39.003  INFO 9203 --- [main] c.s.session.config.FeatureFlags : Feature flag 'parallel-session-validation' ENABLED (new in 3.2.0)
+2026-10-28 09:52:39.004  INFO 9203 --- [main] c.s.session.config.FeatureFlags : Feature flag 'session-cache-ttl' set to 300s (was 120s)
+2026-10-28 09:53:00.120  INFO 9203 --- [nio-8080-exec-1] c.s.session.web.SessionController : POST /api/session/validate completed in 55ms sessionId=S-88501 userId=u-1102 status=200
+2026-10-28 09:53:02.340  INFO 9203 --- [nio-8080-exec-3] c.s.session.web.SessionController : POST /api/session/validate completed in 48ms sessionId=S-88502 userId=u-4471 status=200
+2026-10-28 09:53:04.670  INFO 9203 --- [nio-8080-exec-4] c.s.session.web.SessionController : POST /api/session/validate completed in 61ms sessionId=S-88503 userId=u-9931 status=200
+2026-10-28 09:54:00.001  INFO 9203 --- [scheduling-1] c.s.session.monitoring.HealthReporter : Health check status=UP redis=UP db=UP
+2026-10-28 09:54:10.220  DEBUG 9203 --- [nio-8080-exec-7] c.s.session.service.ParallelSessionValidator : Acquired Redis connection for parallel validation sessionId=S-88510 thread=validation-worker-1
+2026-10-28 09:54:10.280  INFO 9203 --- [nio-8080-exec-7] c.s.session.web.SessionController : POST /api/session/validate completed in 70ms sessionId=S-88510 userId=u-2207 status=200
+2026-10-28 09:54:12.110  DEBUG 9203 --- [nio-8080-exec-9] c.s.session.service.ParallelSessionValidator : Acquired Redis connection for parallel validation sessionId=S-88511 thread=validation-worker-2
+2026-10-28 09:54:12.180  INFO 9203 --- [nio-8080-exec-9] c.s.session.web.SessionController : POST /api/session/validate completed in 75ms sessionId=S-88511 userId=u-3308 status=200
+2026-10-28 09:54:14.330  DEBUG 9203 --- [nio-8080-exec-2] c.s.session.service.ParallelSessionValidator : Acquired Redis connection for parallel validation sessionId=S-88512 thread=validation-worker-3
+2026-10-28 09:54:14.410  INFO 9203 --- [nio-8080-exec-2] c.s.session.web.SessionController : POST /api/session/validate completed in 82ms sessionId=S-88512 userId=u-1102 status=200
+2026-10-28 09:55:00.002  INFO 9203 --- [pool-monitor] c.s.session.monitoring.PoolMonitor : Redis pool status: active=12/50 idle=38 waiting=0
+2026-10-28 09:55:30.440  DEBUG 9203 --- [nio-8080-exec-5] c.s.session.service.ParallelSessionValidator : Acquired Redis connection for parallel validation sessionId=S-88520 thread=validation-worker-1
+2026-10-28 09:55:30.510  INFO 9203 --- [nio-8080-exec-5] c.s.session.web.SessionController : POST /api/session/validate completed in 78ms sessionId=S-88520 userId=u-4471 status=200
+2026-10-28 09:56:00.003  INFO 9203 --- [pool-monitor] c.s.session.monitoring.PoolMonitor : Redis pool status: active=24/50 idle=26 waiting=0
+2026-10-28 09:56:20.100  DEBUG 9203 --- [nio-8080-exec-8] c.s.session.service.ParallelSessionValidator : Acquired Redis connection for parallel validation sessionId=S-88525 thread=validation-worker-2
+2026-10-28 09:56:20.190  INFO 9203 --- [nio-8080-exec-8] c.s.session.web.SessionController : POST /api/session/validate completed in 95ms sessionId=S-88525 userId=u-9931 status=200
+2026-10-28 09:57:00.004  WARN 9203 --- [pool-monitor] c.s.session.monitoring.PoolMonitor : Redis pool pressure: active=35/50 idle=15 waiting=0
+2026-10-28 09:57:40.220  DEBUG 9203 --- [nio-8080-exec-3] c.s.session.service.ParallelSessionValidator : Acquired Redis connection for parallel validation sessionId=S-88530 thread=validation-worker-3
+2026-10-28 09:57:40.330  INFO 9203 --- [nio-8080-exec-3] c.s.session.web.SessionController : POST /api/session/validate completed in 120ms sessionId=S-88530 userId=u-2207 status=200
+2026-10-28 09:58:00.005  WARN 9203 --- [pool-monitor] c.s.session.monitoring.PoolMonitor : Redis pool pressure: active=42/50 idle=8 waiting=0
+2026-10-28 09:58:10.440  DEBUG 9203 --- [nio-8080-exec-6] c.s.session.service.ParallelSessionValidator : Acquired Redis connection for parallel validation sessionId=S-88533 thread=validation-worker-1
+2026-10-28 09:58:10.560  INFO 9203 --- [nio-8080-exec-6] c.s.session.web.SessionController : POST /api/session/validate completed in 140ms sessionId=S-88533 userId=u-3308 status=200
+2026-10-28 09:59:00.006  WARN 9203 --- [pool-monitor] c.s.session.monitoring.PoolMonitor : Redis pool pressure: active=47/50 idle=3 waiting=0
+2026-10-28 09:59:30.110  DEBUG 9203 --- [nio-8080-exec-4] c.s.session.service.ParallelSessionValidator : Acquired Redis connection for parallel validation sessionId=S-88537 thread=validation-worker-2
+2026-10-28 09:59:30.250  INFO 9203 --- [nio-8080-exec-4] c.s.session.web.SessionController : POST /api/session/validate completed in 165ms sessionId=S-88537 userId=u-1102 status=200
+2026-10-28 10:00:00.007  WARN 9203 --- [pool-monitor] c.s.session.monitoring.PoolMonitor : Redis pool pressure: active=49/50 idle=1 waiting=2
+2026-10-28 10:00:30.002  INFO 9203 --- [scheduling-1] c.s.session.monitoring.HealthReporter : Health check status=UP redis=UP db=UP
+2026-10-28 10:01:00.008  WARN 9203 --- [pool-monitor] c.s.session.monitoring.PoolMonitor : Redis pool pressure: active=50/50 idle=0 waiting=5
+2026-10-28 10:01:20.330  DEBUG 9203 --- [nio-8080-exec-7] c.s.session.service.ParallelSessionValidator : Acquired Redis connection for parallel validation sessionId=S-88540 thread=validation-worker-3
+2026-10-28 10:01:20.500  INFO 9203 --- [nio-8080-exec-7] c.s.session.web.SessionController : POST /api/session/validate completed in 210ms sessionId=S-88540 userId=u-4471 status=200
+2026-10-28 10:02:00.009  WARN 9203 --- [pool-monitor] c.s.session.monitoring.PoolMonitor : Redis pool pressure: active=50/50 idle=0 waiting=12
+2026-10-28 10:02:15.440  WARN 9203 --- [nio-8080-exec-2] c.s.session.service.ParallelSessionValidator : Slow Redis operation: GET session:S-88543 took 1850ms (threshold 500ms)
+2026-10-28 10:02:30.550  WARN 9203 --- [nio-8080-exec-5] c.s.session.service.ParallelSessionValidator : Slow Redis operation: GET session:S-88544 took 2400ms (threshold 500ms)
+2026-10-28 10:03:00.010  WARN 9203 --- [pool-monitor] c.s.session.monitoring.PoolMonitor : Redis pool pressure: active=50/50 idle=0 waiting=28
+2026-10-28 10:03:20.660  WARN 9203 --- [nio-8080-exec-1] c.s.session.service.ParallelSessionValidator : Slow Redis operation: GET session:S-88548 took 3200ms (threshold 500ms)
+2026-10-28 10:04:00.011  WARN 9203 --- [pool-monitor] c.s.session.monitoring.PoolMonitor : Redis pool exhausted: active=50/50 idle=0 waiting=45
+2026-10-28 10:04:12.770 ERROR 9203 --- [nio-8080-exec-9] c.s.session.web.GlobalExceptionHandler : Session validation failed sessionId=S-88551 userId=u-9931 - Could not get a resource from the pool
+redis.clients.jedis.exceptions.JedisConnectionException: Could not get a resource from the pool
+	at redis.clients.jedis.util.Pool.getResource(Pool.java:50)
+	at c.s.session.service.ParallelSessionValidator.validateParallel(ParallelSessionValidator.java:72)
+	at c.s.session.service.SessionService.validate(SessionService.java:98)
+	at c.s.session.web.SessionController.validate(SessionController.java:45)
+Caused by: java.util.NoSuchElementException: Pool exhausted. Could not get a resource from the pool after 2000ms
+2026-10-28 10:04:18.880 ERROR 9203 --- [nio-8080-exec-3] c.s.session.web.GlobalExceptionHandler : Session validation failed sessionId=S-88552 userId=u-2207 - Could not get a resource from the pool
+2026-10-28 10:04:25.110 ERROR 9203 --- [nio-8080-exec-6] c.s.session.web.GlobalExceptionHandler : Session validation failed sessionId=S-88553 userId=u-1102 - Could not get a resource from the pool
+2026-10-28 10:04:30.003  INFO 9203 --- [scheduling-1] c.s.session.monitoring.HealthReporter : Health check status=DEGRADED redis=UP db=UP
+2026-10-28 10:05:00.012  WARN 9203 --- [pool-monitor] c.s.session.monitoring.PoolMonitor : Redis pool exhausted: active=50/50 idle=0 waiting=67
+2026-10-28 10:05:05.220 ERROR 9203 --- [nio-8080-exec-4] c.s.session.web.GlobalExceptionHandler : Session validation failed sessionId=S-88555 userId=u-3308 - Could not get a resource from the pool
+2026-10-28 10:05:12.330 ERROR 9203 --- [nio-8080-exec-8] c.s.session.web.GlobalExceptionHandler : Session validation failed sessionId=S-88556 userId=u-4471 - Could not get a resource from the pool
+2026-10-28 10:05:20.440 ERROR 9203 --- [nio-8080-exec-2] c.s.session.web.GlobalExceptionHandler : Session validation failed sessionId=S-88557 userId=u-9931 - Could not get a resource from the pool
+2026-10-28 10:06:00.013  WARN 9203 --- [pool-monitor] c.s.session.monitoring.PoolMonitor : Redis pool exhausted: active=50/50 idle=0 waiting=89
+2026-10-28 10:06:08.550 ERROR 9203 --- [nio-8080-exec-5] c.s.session.web.GlobalExceptionHandler : Session validation failed sessionId=S-88560 userId=u-2207 - Could not get a resource from the pool
+2026-10-28 10:06:15.660 ERROR 9203 --- [nio-8080-exec-7] c.s.session.web.GlobalExceptionHandler : Session validation failed sessionId=S-88561 userId=u-1102 - Could not get a resource from the pool
+2026-10-28 10:06:22.770 ERROR 9203 --- [nio-8080-exec-1] c.s.session.web.GlobalExceptionHandler : Session validation failed sessionId=S-88562 userId=u-3308 - Could not get a resource from the pool
+2026-10-28 10:07:00.014  WARN 9203 --- [pool-monitor] c.s.session.monitoring.PoolMonitor : Redis pool exhausted: active=50/50 idle=0 waiting=124
+2026-10-28 10:07:10.880 ERROR 9203 --- [nio-8080-exec-3] c.s.session.web.GlobalExceptionHandler : Session validation failed sessionId=S-88565 userId=u-4471 - Could not get a resource from the pool
+2026-10-28 10:07:18.990 ERROR 9203 --- [nio-8080-exec-6] c.s.session.web.GlobalExceptionHandler : Session validation failed sessionId=S-88566 userId=u-9931 - Could not get a resource from the pool
+2026-10-28 10:08:00.015  WARN 9203 --- [pool-monitor] c.s.session.monitoring.PoolMonitor : Redis pool exhausted: active=50/50 idle=0 waiting=156
+2026-10-28 10:08:05.110 ERROR 9203 --- [nio-8080-exec-4] c.s.session.web.GlobalExceptionHandler : Session validation failed sessionId=S-88568 userId=u-2207 - Could not get a resource from the pool
+2026-10-28 10:08:12.220 ERROR 9203 --- [nio-8080-exec-9] c.s.session.web.GlobalExceptionHandler : Session validation failed sessionId=S-88569 userId=u-1102 - Could not get a resource from the pool
+2026-10-28 10:08:19.330 ERROR 9203 --- [nio-8080-exec-2] c.s.session.web.GlobalExceptionHandler : Session validation failed sessionId=S-88570 userId=u-3308 - Could not get a resource from the pool
+2026-10-28 10:08:26.440 ERROR 9203 --- [nio-8080-exec-5] c.s.session.web.GlobalExceptionHandler : Session validation failed sessionId=S-88571 userId=u-4471 - Could not get a resource from the pool
+2026-10-28 10:08:33.550 ERROR 9203 --- [nio-8080-exec-7] c.s.session.web.GlobalExceptionHandler : Session validation failed sessionId=S-88572 userId=u-9931 - Could not get a resource from the pool
+2026-10-28 10:09:00.016  WARN 9203 --- [pool-monitor] c.s.session.monitoring.PoolMonitor : Redis pool exhausted: active=50/50 idle=0 waiting=198
+2026-10-28 10:09:30.004  INFO 9203 --- [scheduling-1] c.s.session.monitoring.HealthReporter : Health check status=DOWN redis=UP db=UP

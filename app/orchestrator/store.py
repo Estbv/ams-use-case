@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import os
+import shutil
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -63,3 +64,11 @@ def save_raw_logs(case_id: str, log_files: list[Path]) -> Path:
 
 def case_exists(case_id: str) -> bool:
     return (case_dir(case_id) / "case.json").exists()
+
+
+def delete_case(case_id: str) -> None:
+    """Elimina el directorio del expediente (case.json + logs)."""
+    d = case_dir(case_id)
+    if d.exists():
+        shutil.rmtree(d)
+        logger.info("Expediente eliminado: %s", d)

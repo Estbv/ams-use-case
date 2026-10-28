@@ -133,9 +133,32 @@ def generate_html_report(case: Case) -> str:
         severity = case.triage.severity
 
     # Tiempo total
-    total_duration = sum(
+    total_duration = case.total_duration or sum(
         (ph.duration if ph else 0.0) for ph in case.phases.values()
     )
+
+    # Resumen de tiempos por fase
+    _PHASE_LABELS = {
+        "preprocess": "Preproceso",
+        "ingest": "Ingesta",
+        "triage": "Triage",
+        "rca": "Causa Raiz",
+        "resolution": "Resolucion",
+        "communication": "Comunicacion",
+    }
+    timing_rows = []
+    for pname in ("preprocess", "ingest", "triage", "rca", "resolution", "communication"):
+        ph = case.phases.get(pname)
+        dur = ph.duration if ph else 0.0
+        pct = (dur / total_duration * 100.0) if total_duration > 0 else 0.0
+        timing_rows.append({
+            "phase": pname,
+            "label": _PHASE_LABELS.get(pname, pname),
+            "duration": dur,
+            "percent": pct,
+            "status": ph.status if ph else "pending",
+            "tokens": (ph.tokens.get("total", 0) if ph and ph.tokens else 0),
+        })
 
     # Ticket info
     ticket_id = ""
@@ -156,6 +179,7 @@ def generate_html_report(case: Case) -> str:
         "application": application,
         "severity": severity,
         "total_duration": total_duration,
+        "timing_rows": timing_rows,
         "model": model,
         "case_status_class": case_status_class,
         "notable_evidence": notable_evidence,

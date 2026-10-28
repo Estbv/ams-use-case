@@ -65,6 +65,12 @@ pre.raw{background:#f7fafc;padding:10px;border-radius:4px;overflow-x:auto;font-s
 .empty{color:#a0aec0;padding:10px 0}
 .risk-low{color:#38a169;font-weight:600}.risk-medium{color:#d69e2e;font-weight:600}.risk-high{color:#e53e3e;font-weight:600}
 .footer{text-align:center;color:#a0aec0;font-size:.8rem;margin-top:20px;padding:10px}
+.timing-bar{height:20px;border-radius:4px;overflow:hidden;display:flex;background:#edf2f7}
+.timing-bar-segment{height:100%;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff;font-weight:600;min-width:0;overflow:hidden;white-space:nowrap}
+.timing-bar-segment:hover{opacity:.85}
+.timing-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;font-size:.8rem}
+.timing-legend-item{display:flex;align-items:center;gap:4px}
+.timing-legend-dot{width:10px;height:10px;border-radius:2px;display:inline-block}
 </style>
 </head>
 <body>
@@ -85,6 +91,51 @@ pre.raw{background:#f7fafc;padding:10px;border-radius:4px;overflow-x:auto;font-s
   <h3>Descripcion</h3>
   <p>{{ case.ticket.description }}</p>
   {% endif %}
+</div>
+
+{# ── Resumen de Tiempos ── #}
+<div class="section">
+  <h2 class="section-title">Resumen de Tiempos de Procesamiento</h2>
+  <div class="header-grid">
+    <div class="header-item"><strong>Tiempo total:</strong> {{ "%.2f"|format(total_duration) }}s</div>
+    <div class="header-item"><strong>Inicio:</strong> {{ case.created_at.strftime('%Y-%m-%d %H:%M:%S') if case.created_at else '' }}</div>
+    <div class="header-item"><strong>Fin:</strong> {{ case.completed_at.strftime('%Y-%m-%d %H:%M:%S') if case.completed_at else 'N/A' }}</div>
+    <div class="header-item"><strong>Modelo:</strong> {{ model }}</div>
+  </div>
+  {% set _phase_colors = {'preprocess':'#3182ce','ingest':'#805ad5','triage':'#d69e2e','rca':'#e53e3e','resolution':'#38a169','communication':'#319795'} %}
+  {% if total_duration > 0 %}
+  <div class="timing-bar" style="margin-top:12px">
+    {% for row in timing_rows %}
+    {% if row.duration > 0 %}
+    <div class="timing-bar-segment" style="width:{{ "%.2f"|format(row.percent) }}%;background:{{ _phase_colors[row.phase] }}" title="{{ row.label }}: {{ "%.2f"|format(row.duration) }}s ({{ "%.1f"|format(row.percent) }}%)">{{ row.label if row.percent > 8 else '' }}</div>
+    {% endif %}
+    {% endfor %}
+  </div>
+  <div class="timing-legend">
+    {% for row in timing_rows %}
+    <div class="timing-legend-item"><span class="timing-legend-dot" style="background:{{ _phase_colors[row.phase] }}"></span>{{ row.label }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <table style="margin-top:12px">
+    <tr><th>Fase</th><th>Estado</th><th>Duracion</th><th>% del total</th><th>Tokens</th></tr>
+    {% for row in timing_rows %}
+    <tr>
+      <td>{{ row.label }}</td>
+      <td><span class="badge badge-{{ phase_class(row.phase) }}">{{ row.status }}</span></td>
+      <td>{{ "%.3f"|format(row.duration) }}s</td>
+      <td>{{ "%.1f"|format(row.percent) }}%</td>
+      <td>{{ row.tokens if row.tokens else '' }}</td>
+    </tr>
+    {% endfor %}
+    <tr style="font-weight:600;border-top:2px solid #cbd5e0">
+      <td>Total</td>
+      <td></td>
+      <td>{{ "%.3f"|format(total_duration) }}s</td>
+      <td>100.0%</td>
+      <td>{{ timing_rows|sum(attribute='tokens') }}</td>
+    </tr>
+  </table>
 </div>
 
 {# ── Preproceso ── #}

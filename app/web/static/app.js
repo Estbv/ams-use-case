@@ -338,6 +338,7 @@ async function loadCases() {
           <a class="action-link" onclick="viewCase('${c.case_id}')">Ver</a>
           ${c.status === "completed" || c.status === "degraded" ? `| <a class="action-link" href="/cases/${c.case_id}/report" target="_blank">Reporte</a>` : ""}
           ${c.status === "failed" || c.status === "created" ? `| <a class="action-link" onclick="rerunCase('${c.case_id}')">${c.status === "failed" ? "Reanudar" : "Ejecutar"}</a>` : ""}
+          | <a class="action-link action-danger" onclick="deleteCase('${c.case_id}')">Borrar</a>
         </td>
       `;
       tbody.appendChild(tr);
@@ -375,6 +376,21 @@ window.rerunCase = async function(caseId) {
       }
     }
     connectSSE(caseId);
+  } catch (err) {
+    alert("Error: " + err);
+  }
+};
+
+window.deleteCase = async function(caseId) {
+  if (!confirm("Borrar el caso " + caseId + "? Esta accion no se puede deshacer.")) return;
+  try {
+    const resp = await fetch(`/cases/${caseId}`, { method: "DELETE" });
+    if (!resp.ok) {
+      const data = await resp.json();
+      alert("Error: " + (data.error || "") + "\n" + (data.detail || ""));
+      return;
+    }
+    loadCases();
   } catch (err) {
     alert("Error: " + err);
   }

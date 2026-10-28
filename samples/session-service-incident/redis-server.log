@@ -1,0 +1,31 @@
+2026-10-28 09:48:00.000 [INFO] Redis 7.2.1 started on port 6379, maxclients=10000, maxmemory=4gb
+2026-10-28 09:48:00.001 [INFO] Loading RDB file dump.rdb (3.2 GB)
+2026-10-28 09:48:02.120 [INFO] RDB loaded: 12458302 keys loaded in 2.1s
+2026-10-28 09:50:00.000 [INFO] Connected clients: 15, used memory: 3.21 GB (80.2% of 4 GB)
+2026-10-28 09:52:30.500 [INFO] New connection from 10.20.8.31:52301 (session-service v3.2.0)
+2026-10-28 09:54:00.000 [INFO] Connected clients: 18, used memory: 3.25 GB (81.3% of 4 GB)
+2026-10-28 09:55:00.000 [INFO] Connected clients: 24, used memory: 3.28 GB (82.0% of 4 GB)
+2026-10-28 09:56:00.000 [INFO] Connected clients: 31, used memory: 3.30 GB (82.5% of 4 GB)
+2026-10-28 09:57:00.000 [WARN] Connected clients rising rapidly: 39 clients (baseline: 15)
+2026-10-28 09:58:00.000 [WARN] Connected clients rising rapidly: 46 clients (baseline: 15)
+2026-10-28 09:59:00.000 [WARN] Connected clients rising rapidly: 52 clients (baseline: 15)
+2026-10-28 10:00:00.000 [INFO] BGSAVE started by scheduler
+2026-10-28 10:00:00.050 [WARN] BGSAVE: fork() completed, 12458302 keys, writing to temp-rewriteaof-bg.rdb
+2026-10-28 10:00:02.300 [INFO] BGSAVE completed in 2.3s, file size: 3.21 GB
+2026-10-28 10:00:30.000 [WARN] Connected clients rising rapidly: 58 clients (baseline: 15)
+2026-10-28 10:01:00.000 [WARN] Connected clients rising rapidly: 64 clients (baseline: 15)
+2026-10-28 10:02:00.000 [WARN] Connected clients: 72, used memory: 3.35 GB (83.8% of 4 GB)
+2026-10-28 10:03:00.000 [WARN] Connected clients: 81, used memory: 3.38 GB (84.5% of 4 GB)
+2026-10-28 10:03:30.000 [WARN] Client output buffer hard limit reached for 12 clients, closing connections
+2026-10-28 10:04:00.000 [ERROR] Max number of clients reached (10000), rejecting new connections from 10.20.8.31
+2026-10-28 10:04:05.000 [ERROR] Could not accept client: maxclients reached
+2026-10-28 10:04:10.000 [ERROR] Could not accept client: maxclients reached
+2026-10-28 10:04:15.000 [ERROR] Could not accept client: maxclients reached
+2026-10-28 10:05:00.000 [ERROR] Could not accept client: maxclients reached
+2026-10-28 10:05:05.000 [ERROR] Could not accept client: maxclients reached
+2026-10-28 10:05:10.000 [ERROR] Could not accept client: maxclients reached
+2026-10-28 10:06:00.000 [ERROR] Could not accept client: maxclients reached
+2026-10-28 10:07:00.000 [ERROR] Could not accept client: maxclients reached
+2026-10-28 10:08:00.000 [ERROR] Could not accept client: maxclients reached
+2026-10-28 10:09:00.000 [ERROR] Could not accept client: maxclients reached
+2026-10-28 10:09:30.000 [INFO] Connected clients: 9987, used memory: 3.41 GB (85.3% of 4 GB)

@@ -74,6 +74,7 @@ class Pipeline:
         if errors:
             raise RuntimeError("Configuracion LLM invalida: " + "; ".join(errors))
 
+        t_start = time.time()
         case = Case(id=case_id, ticket=ticket, status="running")
         case.init_phases()
         save_raw_logs(case_id, log_files)
@@ -86,22 +87,30 @@ class Pipeline:
         with bind_context(case_id, "triage"):
             self._fase2_triage(case)
         if case.status == "failed":
+            case.completed_at = datetime.now()
+            case.total_duration = time.time() - t_start
             save_case(case)
             return case
         with bind_context(case_id, "rca"):
             self._fase3_rca(case)
         if case.status in ("failed", "waiting_review"):
+            case.completed_at = datetime.now()
+            case.total_duration = time.time() - t_start
             save_case(case)
             return case
         with bind_context(case_id, "resolution"):
             self._fase4a_resolution(case)
         if case.status == "failed":
+            case.completed_at = datetime.now()
+            case.total_duration = time.time() - t_start
             save_case(case)
             return case
         with bind_context(case_id, "communication"):
             self._fase4b_communication(case)
 
         case.status = "completed"
+        case.completed_at = datetime.now()
+        case.total_duration = time.time() - t_start
         save_case(case)
         self._emit("done", "ok", "Flujo completado", 100.0)
         return case
@@ -122,19 +131,32 @@ class Pipeline:
         if not approved:
             case.status = "failed"
             case.set_phase("rca", "failed", error="revision humana rechazo la hipotesis")
+            case.completed_at = datetime.now()
+            case.total_duration = sum(
+                (ph.duration if ph else 0.0) for ph in case.phases.values()
+            )
             save_case(case)
             return case
 
+        t_start = time.time()
         case.status = "running"
         with bind_context(case_id, "resolution"):
             self._fase4a_resolution(case)
         if case.status == "failed":
+            case.completed_at = datetime.now()
+            case.total_duration = sum(
+                (ph.duration if ph else 0.0) for ph in case.phases.values()
+            )
             save_case(case)
             return case
         with bind_context(case_id, "communication"):
             self._fase4b_communication(case)
 
         case.status = "completed"
+        case.completed_at = datetime.now()
+        case.total_duration = sum(
+            (ph.duration if ph else 0.0) for ph in case.phases.values()
+        )
         save_case(case)
         self._emit("done", "ok", "Flujo completado tras revision", 100.0)
         return case
@@ -163,6 +185,10 @@ class Pipeline:
 
         if first_non_ok is None:
             case.status = "completed"
+            case.completed_at = datetime.now()
+            case.total_duration = sum(
+                (ph.duration if ph else 0.0) for ph in case.phases.values()
+            )
             save_case(case)
             return case
 
@@ -181,6 +207,10 @@ class Pipeline:
         remaining = self._PHASE_ORDER[self._PHASE_ORDER.index(first_non_ok):]
         for phase_name in remaining:
             if case.status in ("failed", "waiting_review"):
+                case.completed_at = datetime.now()
+                case.total_duration = sum(
+                    (ph.duration if ph else 0.0) for ph in case.phases.values()
+                )
                 save_case(case)
                 return case
             with bind_context(case_id, phase_name):
@@ -194,6 +224,10 @@ class Pipeline:
                     self._fase4b_communication(case)
 
         case.status = "completed"
+        case.completed_at = datetime.now()
+        case.total_duration = sum(
+            (ph.duration if ph else 0.0) for ph in case.phases.values()
+        )
         save_case(case)
         self._emit("done", "ok", "Flujo completado (reanudado)", 100.0)
         return case

@@ -34,6 +34,7 @@ from app.orchestrator.pipeline import Pipeline, ProgressEvent
 from app.orchestrator.store import (
     case_dir,
     case_exists,
+    delete_case,
     load_case,
     save_case,
     save_raw_logs,
@@ -104,6 +105,8 @@ def _case_summary(case_id: str) -> dict | None:
         "case_id": case.id,
         "status": case.status,
         "created_at": case.created_at.isoformat() if case.created_at else "",
+        "completed_at": case.completed_at.isoformat() if case.completed_at else "",
+        "total_duration": case.total_duration,
         "ticket_id": case.ticket.ticket_id if case.ticket else "",
         "application": case.ticket.application if case.ticket else "",
         "severity": case.triage.severity if case.triage else "",
@@ -366,6 +369,8 @@ def get_case(case_id: str):
         "case_id": case.id,
         "status": case.status,
         "created_at": case.created_at.isoformat() if case.created_at else "",
+        "completed_at": case.completed_at.isoformat() if case.completed_at else "",
+        "total_duration": case.total_duration,
         "ticket": case.ticket.model_dump(mode="json") if case.ticket else None,
         "sources": case.sources,
         "evidence_count": len(case.evidence),
@@ -467,3 +472,18 @@ def list_cases():
         if summary:
             cases.append(summary)
     return JSONResponse(content={"cases": cases})
+
+
+@app.delete("/cases/{case_id}")
+def delete_case_endpoint(case_id: str):
+    if not case_exists(case_id):
+        return _err(404, "caso no encontrado", case_id)
+    if case_id in _running_threads:
+        return _err(409, "caso en ejecucion", "detén el caso antes de borrarlo")
+    try:
+        delete_case(case_id)
+    except Exception as exc:
+        return _err(500, "error al borrar", str(exc))
+    _event_queues.pop(case_id, None)
+    _stop_requested.discard(case_id)
+    return JSONResponse(content={"case_id": case_id, "status": "deleted"})

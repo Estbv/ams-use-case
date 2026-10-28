@@ -397,6 +397,47 @@ def test_list_cases(client):
 
 
 # ---------------------------------------------------------------------------
+# Delete case
+# ---------------------------------------------------------------------------
+
+def test_delete_case(client):
+    files = _log_files()
+    resp = client.post("/cases", files=files, data={
+        "ticket_id": "INC-DELETE",
+        "application": "checkout-service",
+    })
+    case_id = resp.json()["case_id"]
+
+    resp = client.delete(f"/cases/{case_id}")
+    assert resp.status_code == 200
+    assert resp.json()["status"] == "deleted"
+
+    resp = client.get(f"/cases/{case_id}")
+    assert resp.status_code == 404
+
+
+def test_delete_case_not_found(client):
+    resp = client.delete("/cases/NO-EXIST")
+    assert resp.status_code == 404
+
+
+def test_delete_case_removed_from_list(client):
+    files = _log_files()
+    resp = client.post("/cases", files=files, data={
+        "ticket_id": "INC-DEL2",
+        "application": "checkout-service",
+    })
+    case_id = resp.json()["case_id"]
+
+    resp = client.delete(f"/cases/{case_id}")
+    assert resp.status_code == 200
+
+    resp = client.get("/cases")
+    ids = [c["case_id"] for c in resp.json()["cases"]]
+    assert case_id not in ids
+
+
+# ---------------------------------------------------------------------------
 # Error format
 # ---------------------------------------------------------------------------
 

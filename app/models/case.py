@@ -52,6 +52,8 @@ class Case(BaseModel):
 
     id: str
     created_at: datetime = Field(default_factory=datetime.now)
+    completed_at: Optional[datetime] = None
+    total_duration: float = 0.0
     status: CaseStatus = "created"
 
     ticket: Optional[Ticket] = None
