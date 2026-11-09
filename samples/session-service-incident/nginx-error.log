@@ -1,8 +1,0 @@
-2026/10/28 09:52:30 [info] 1204#1204: *8811 client 10.20.8.31 connected to 127.0.0.1:8080
-2026/10/28 10:04:12 [error] 1204#1204: *8845 upstream returned 503 (Service Unavailable) while processing, client: 203.0.113.40, request: "POST /api/session/validate HTTP/1.1"
-2026/10/28 10:04:18 [error] 1204#1204: *8846 upstream returned 503 (Service Unavailable) while processing, client: 203.0.113.51, request: "POST /api/session/validate HTTP/1.1"
-2026/10/28 10:05:05 [error] 1204#1204: *8850 upstream returned 503 (Service Unavailable) while processing, client: 203.0.113.24, request: "POST /api/session/validate HTTP/1.1"
-2026/10/28 10:06:08 [error] 1204#1204: *8855 upstream returned 503 (Service Unavailable) while processing, client: 203.0.113.51, request: "POST /api/session/validate HTTP/1.1"
-2026/10/28 10:07:10 [error] 1204#1204: *8860 upstream returned 503 (Service Unavailable) while processing, client: 203.0.113.33, request: "POST /api/session/validate HTTP/1.1"
-2026/10/28 10:08:05 [error] 1204#1204: *8865 upstream returned 503 (Service Unavailable) while processing, client: 203.0.113.51, request: "POST /api/session/validate HTTP/1.1"
-2026/10/28 10:09:00 [error] 1204#1204: *8870 upstream returned 503 (Service Unavailable) while processing, client: 203.0.113.51, request: "POST /api/session/validate HTTP/1.1"

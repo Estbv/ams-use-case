@@ -74,3 +74,85 @@ Caused by: java.util.NoSuchElementException: Pool exhausted. Could not get a res
 2026-10-28 10:08:33.550 ERROR 9203 --- [nio-8080-exec-7] c.s.session.web.GlobalExceptionHandler : Session validation failed sessionId=S-88572 userId=u-9931 - Could not get a resource from the pool
 2026-10-28 10:09:00.016  WARN 9203 --- [pool-monitor] c.s.session.monitoring.PoolMonitor : Redis pool exhausted: active=50/50 idle=0 waiting=198
 2026-10-28 10:09:30.004  INFO 9203 --- [scheduling-1] c.s.session.monitoring.HealthReporter : Health check status=DOWN redis=UP db=UP
+
+#nginx-error log
+
+2026/10/28 09:52:30 [info] 1204#1204: *8811 client 10.20.8.31 connected to 127.0.0.1:8080
+2026/10/28 10:04:12 [error] 1204#1204: *8845 upstream returned 503 (Service Unavailable) while processing, client: 203.0.113.40, request: "POST /api/session/validate HTTP/1.1"
+2026/10/28 10:04:18 [error] 1204#1204: *8846 upstream returned 503 (Service Unavailable) while processing, client: 203.0.113.51, request: "POST /api/session/validate HTTP/1.1"
+2026/10/28 10:05:05 [error] 1204#1204: *8850 upstream returned 503 (Service Unavailable) while processing, client: 203.0.113.24, request: "POST /api/session/validate HTTP/1.1"
+2026/10/28 10:06:08 [error] 1204#1204: *8855 upstream returned 503 (Service Unavailable) while processing, client: 203.0.113.51, request: "POST /api/session/validate HTTP/1.1"
+2026/10/28 10:07:10 [error] 1204#1204: *8860 upstream returned 503 (Service Unavailable) while processing, client: 203.0.113.33, request: "POST /api/session/validate HTTP/1.1"
+2026/10/28 10:08:05 [error] 1204#1204: *8865 upstream returned 503 (Service Unavailable) while processing, client: 203.0.113.51, request: "POST /api/session/validate HTTP/1.1"
+2026/10/28 10:09:00 [error] 1204#1204: *8870 upstream returned 503 (Service Unavailable) while processing, client: 203.0.113.51, request: "POST /api/session/validate HTTP/1.1"
+
+#ngingx access log
+
+203.0.113.10 - - [28/Oct/2026:09:48:12 +0000] "POST /api/session/validate HTTP/1.1" 200 210 "-" "App/2.1" rt=0.045
+203.0.113.24 - - [28/Oct/2026:09:48:15 +0000] "POST /api/session/validate HTTP/1.1" 200 210 "-" "App/2.1" rt=0.038
+203.0.113.51 - - [28/Oct/2026:09:51:33 +0000] "POST /api/session/validate HTTP/1.1" 200 210 "-" "App/2.1" rt=0.041
+203.0.113.10 - - [28/Oct/2026:09:53:00 +0000] "POST /api/session/validate HTTP/1.1" 200 210 "-" "App/2.1" rt=0.055
+203.0.113.24 - - [28/Oct/2026:09:53:02 +0000] "POST /api/session/validate HTTP/1.1" 200 210 "-" "App/2.1" rt=0.048
+203.0.113.33 - - [28/Oct/2026:09:54:10 +0000] "POST /api/session/validate HTTP/1.1" 200 210 "-" "App/2.1" rt=0.070
+203.0.113.40 - - [28/Oct/2026:09:54:12 +0000] "POST /api/session/validate HTTP/1.1" 200 210 "-" "App/2.1" rt=0.075
+203.0.113.51 - - [28/Oct/2026:09:55:30 +0000] "POST /api/session/validate HTTP/1.1" 200 210 "-" "App/2.1" rt=0.078
+203.0.113.10 - - [28/Oct/2026:09:56:20 +0000] "POST /api/session/validate HTTP/1.1" 200 210 "-" "App/2.1" rt=0.095
+203.0.113.24 - - [28/Oct/2026:09:57:40 +0000] "POST /api/session/validate HTTP/1.1" 200 210 "-" "App/2.1" rt=0.120
+203.0.113.33 - - [28/Oct/2026:09:58:10 +0000] "POST /api/session/validate HTTP/1.1" 200 210 "-" "App/2.1" rt=0.140
+203.0.113.40 - - [28/Oct/2026:09:59:30 +0000] "POST /api/session/validate HTTP/1.1" 200 210 "-" "App/2.1" rt=0.165
+203.0.113.51 - - [28/Oct/2026:10:01:20 +0000] "POST /api/session/validate HTTP/1.1" 200 210 "-" "App/2.1" rt=0.210
+203.0.113.10 - - [28/Oct/2026:10:02:15 +0000] "POST /api/session/validate HTTP/1.1" 200 210 "-" "App/2.1" rt=1.850
+203.0.113.24 - - [28/Oct/2026:10:02:30 +0000] "POST /api/session/validate HTTP/1.1" 200 210 "-" "App/2.1" rt=2.400
+203.0.113.33 - - [28/Oct/2026:10:03:20 +0000] "POST /api/session/validate HTTP/1.1" 200 210 "-" "App/2.1" rt=3.200
+203.0.113.40 - - [28/Oct/2026:10:04:12 +0000] "POST /api/session/validate HTTP/1.1" 503 118 "-" "App/2.1" rt=2.000
+203.0.113.51 - - [28/Oct/2026:10:04:18 +0000] "POST /api/session/validate HTTP/1.1" 503 118 "-" "App/2.1" rt=2.000
+203.0.113.10 - - [28/Oct/2026:10:04:25 +0000] "POST /api/session/validate HTTP/1.1" 503 118 "-" "App/2.1" rt=2.000
+203.0.113.24 - - [28/Oct/2026:10:05:05 +0000] "POST /api/session/validate HTTP/1.1" 503 118 "-" "App/2.1" rt=2.000
+203.0.113.33 - - [28/Oct/2026:10:05:12 +0000] "POST /api/session/validate HTTP/1.1" 503 118 "-" "App/2.1" rt=2.000
+203.0.113.40 - - [28/Oct/2026:10:05:20 +0000] "POST /api/session/validate HTTP/1.1" 503 118 "-" "App/2.1" rt=2.000
+203.0.113.51 - - [28/Oct/2026:10:06:08 +0000] "POST /api/session/validate HTTP/1.1" 503 118 "-" "App/2.1" rt=2.000
+203.0.113.10 - - [28/Oct/2026:10:06:15 +0000] "POST /api/session/validate HTTP/1.1" 503 118 "-" "App/2.1" rt=2.000
+203.0.113.24 - - [28/Oct/2026:10:06:22 +0000] "POST /api/session/validate HTTP/1.1" 503 118 "-" "App/2.1" rt=2.000
+203.0.113.33 - - [28/Oct/2026:10:07:10 +0000] "POST /api/session/validate HTTP/1.1" 503 118 "-" "App/2.1" rt=2.000
+203.0.113.40 - - [28/Oct/2026:10:07:18 +0000] "POST /api/session/validate HTTP/1.1" 503 118 "-" "App/2.1" rt=2.000
+203.0.113.51 - - [28/Oct/2026:10:08:05 +0000] "POST /api/session/validate HTTP/1.1" 503 118 "-" "App/2.1" rt=2.000
+203.0.113.10 - - [28/Oct/2026:10:08:12 +0000] "POST /api/session/validate HTTP/1.1" 503 118 "-" "App/2.1" rt=2.000
+203.0.113.24 - - [28/Oct/2026:10:08:19 +0000] "POST /api/session/validate HTTP/1.1" 503 118 "-" "App/2.1" rt=2.000
+203.0.113.40 - - [28/Oct/2026:10:08:26 +0000] "POST /api/session/validate HTTP/1.1" 503 118 "-" "App/2.1" rt=2.000
+203.0.113.33 - - [28/Oct/2026:10:08:33 +0000] "POST /api/session/validate HTTP/1.1" 503 118 "-" "App/2.1" rt=2.000
+203.0.113.51 - - [28/Oct/2026:10:09:00 +0000] "POST /api/session/validate HTTP/1.1" 503 118 "-" "App/2.1" rt=2.000
+
+#redis server logs
+
+2026-10-28 09:48:00.000 [INFO] Redis 7.2.1 started on port 6379, maxclients=10000, maxmemory=4gb
+2026-10-28 09:48:00.001 [INFO] Loading RDB file dump.rdb (3.2 GB)
+2026-10-28 09:48:02.120 [INFO] RDB loaded: 12458302 keys loaded in 2.1s
+2026-10-28 09:50:00.000 [INFO] Connected clients: 15, used memory: 3.21 GB (80.2% of 4 GB)
+2026-10-28 09:52:30.500 [INFO] New connection from 10.20.8.31:52301 (session-service v3.2.0)
+2026-10-28 09:54:00.000 [INFO] Connected clients: 18, used memory: 3.25 GB (81.3% of 4 GB)
+2026-10-28 09:55:00.000 [INFO] Connected clients: 24, used memory: 3.28 GB (82.0% of 4 GB)
+2026-10-28 09:56:00.000 [INFO] Connected clients: 31, used memory: 3.30 GB (82.5% of 4 GB)
+2026-10-28 09:57:00.000 [WARN] Connected clients rising rapidly: 39 clients (baseline: 15)
+2026-10-28 09:58:00.000 [WARN] Connected clients rising rapidly: 46 clients (baseline: 15)
+2026-10-28 09:59:00.000 [WARN] Connected clients rising rapidly: 52 clients (baseline: 15)
+2026-10-28 10:00:00.000 [INFO] BGSAVE started by scheduler
+2026-10-28 10:00:00.050 [WARN] BGSAVE: fork() completed, 12458302 keys, writing to temp-rewriteaof-bg.rdb
+2026-10-28 10:00:02.300 [INFO] BGSAVE completed in 2.3s, file size: 3.21 GB
+2026-10-28 10:00:30.000 [WARN] Connected clients rising rapidly: 58 clients (baseline: 15)
+2026-10-28 10:01:00.000 [WARN] Connected clients rising rapidly: 64 clients (baseline: 15)
+2026-10-28 10:02:00.000 [WARN] Connected clients: 72, used memory: 3.35 GB (83.8% of 4 GB)
+2026-10-28 10:03:00.000 [WARN] Connected clients: 81, used memory: 3.38 GB (84.5% of 4 GB)
+2026-10-28 10:03:30.000 [WARN] Client output buffer hard limit reached for 12 clients, closing connections
+2026-10-28 10:04:00.000 [ERROR] Max number of clients reached (10000), rejecting new connections from 10.20.8.31
+2026-10-28 10:04:05.000 [ERROR] Could not accept client: maxclients reached
+2026-10-28 10:04:10.000 [ERROR] Could not accept client: maxclients reached
+2026-10-28 10:04:15.000 [ERROR] Could not accept client: maxclients reached
+2026-10-28 10:05:00.000 [ERROR] Could not accept client: maxclients reached
+2026-10-28 10:05:05.000 [ERROR] Could not accept client: maxclients reached
+2026-10-28 10:05:10.000 [ERROR] Could not accept client: maxclients reached
+2026-10-28 10:06:00.000 [ERROR] Could not accept client: maxclients reached
+2026-10-28 10:07:00.000 [ERROR] Could not accept client: maxclients reached
+2026-10-28 10:08:00.000 [ERROR] Could not accept client: maxclients reached
+2026-10-28 10:09:00.000 [ERROR] Could not accept client: maxclients reached
+2026-10-28 10:09:30.000 [INFO] Connected clients: 9987, used memory: 3.41 GB (85.3% of 4 GB)
+

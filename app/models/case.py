@@ -55,6 +55,7 @@ class Case(BaseModel):
     completed_at: Optional[datetime] = None
     total_duration: float = 0.0
     status: CaseStatus = "created"
+    model: str = ""
 
     ticket: Optional[Ticket] = None
     sources: list[str] = Field(default_factory=list)

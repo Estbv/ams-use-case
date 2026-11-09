@@ -5,6 +5,7 @@ Nunca registra la clave en logs ni errores.
 """
 from __future__ import annotations
 
+import json
 import sys
 import time
 from dataclasses import dataclass, field
@@ -189,7 +190,8 @@ class MaaSClient:
         )
 
     def _parse_response(self, response: requests.Response, duration: float) -> ChatResult:
-        body = response.json()
+        response.encoding = "utf-8"
+        body = json.loads(response.content)
         choices = body.get("choices", [])
         if not choices:
             raise MaaSError("Respuesta sin choices.", status_code=200)

@@ -76,6 +76,7 @@ class Pipeline:
 
         t_start = time.time()
         case = Case(id=case_id, ticket=ticket, status="running")
+        case.model = settings.MAAS_MODEL or settings.LLM_MODE
         case.init_phases()
         save_raw_logs(case_id, log_files)
         save_case(case)
@@ -249,12 +250,18 @@ class Pipeline:
             masked, counters = mask_lines(lines, custom_rules=custom_rules)
             sigs = build_signatures(masked, source)
             all_signatures.extend(sigs)
-            source_data[source] = {
-                "file": f.name,
-                "lines": len(lines),
-                "signatures": sigs,
-                "masked_lines": masked,
-            }
+            if source in source_data:
+                source_data[source]["signatures"].extend(sigs)
+                source_data[source]["masked_lines"].extend(masked)
+                source_data[source]["lines"] += len(lines)
+                source_data[source]["file"] += f", {f.name}"
+            else:
+                source_data[source] = {
+                    "file": f.name,
+                    "lines": len(lines),
+                    "signatures": list(sigs),
+                    "masked_lines": list(masked),
+                }
             case.masking_stats = {k: case.masking_stats.get(k, 0) + v for k, v in counters.items()}
 
         all_signatures = assign_ids(all_signatures)

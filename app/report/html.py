@@ -171,7 +171,7 @@ def generate_html_report(case: Case) -> str:
     case_status_class = _phase_status_map(case.status) if case.status != "waiting_review" else "waiting"
 
     # Model
-    model = settings.MAAS_MODEL or settings.LLM_MODE
+    model = case.model or settings.MAAS_MODEL or settings.LLM_MODE
 
     context = {
         "case": case,
